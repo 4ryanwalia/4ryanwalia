@@ -15,6 +15,7 @@ and rewrites the block between SPOTIFY:START / SPOTIFY:END in README.md.
 from __future__ import annotations
 
 import base64
+import hashlib
 import html
 import json
 import os
@@ -381,7 +382,7 @@ START = "<!-- SPOTIFY:START -->"
 END = "<!-- SPOTIFY:END -->"
 
 
-def readme_block(d: dict, stamp: int) -> str:
+def readme_block(d: dict, stamp: str) -> str:
     state = d.get("state")
     if state == "playing":
         cap = "Playing right now"
@@ -403,10 +404,10 @@ def readme_block(d: dict, stamp: int) -> str:
         '  <a href="' + esc(href) + '">\n'
         "    <picture>\n"
         '      <source media="(prefers-color-scheme: dark)" '
-        'srcset="./assets/spotify-dark.svg?v=' + str(stamp) + '">\n'
+        'srcset="./assets/spotify-' + stamp + '-dark.svg">\n'
         '      <source media="(prefers-color-scheme: light)" '
-        'srcset="./assets/spotify-light.svg?v=' + str(stamp) + '">\n'
-        '      <img src="./assets/spotify-dark.svg?v=' + str(stamp) + '" '
+        'srcset="./assets/spotify-' + stamp + '-light.svg">\n'
+        '      <img src="./assets/spotify-' + stamp + '-dark.svg" '
         'alt="' + esc(alt) + '" width="480">\n'
         "    </picture>\n"
         "  </a>\n"
@@ -414,7 +415,7 @@ def readme_block(d: dict, stamp: int) -> str:
     )
 
 
-def patch_readme(d: dict, stamp: int) -> bool:
+def patch_readme(d: dict, stamp: str) -> bool:
     if not os.path.exists(README):
         return False
     with open(README, encoding="utf-8") as fh:
@@ -452,12 +453,16 @@ def main() -> int:
         sort_keys=True,
     )
     previous = ""
+    previous_stamp = ""
     if os.path.exists(STATE):
         try:
             with open(STATE, encoding="utf-8") as fh:
-                previous = json.load(fh).get("fingerprint", "")
+                saved = json.load(fh)
+            previous = saved.get("fingerprint", "")
+            previous_stamp = saved.get("stamp", "")
         except Exception:
             previous = ""
+            previous_stamp = ""
 
     if fingerprint == previous and os.path.exists(os.path.join(ASSETS, "spotify-dark.svg")):
         print("unchanged - nothing to commit")
@@ -476,15 +481,35 @@ def main() -> int:
 
     data["art_uri"] = fetch_art(data.get("art", ""))
     os.makedirs(ASSETS, exist_ok=True)
-    for theme in ("dark", "light"):
-        path = os.path.join(ASSETS, "spotify-" + theme + ".svg")
-        with open(path, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(card(data, theme))
 
-    stamp = int(time.time())
+    # One filename per distinct card. GitHub's CDN caches by path and
+    # ignores the query string, so "?v=" never busted anything; a path it
+    # has not seen is the only thing it cannot answer from cache.
+    stamp = hashlib.sha1(
+        (fingerprint + str(time.time())).encode()).hexdigest()[:10]
+
+    for theme in ("dark", "light"):
+        svg = card(data, theme)
+        # The stable name stays too, for anything linking straight at it.
+        for path in (
+                os.path.join(ASSETS, "spotify-" + theme + ".svg"),
+                os.path.join(ASSETS, "spotify-" + stamp + "-" + theme + ".svg")):
+            with open(path, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write(svg)
+
     patch_readme(data, stamp)
+
+    # Sweep the pair this one replaces, so the directory does not grow a
+    # file per track played, forever.
+    for theme in ("dark", "light"):
+        stale = os.path.join(
+            ASSETS, "spotify-" + previous_stamp + "-" + theme + ".svg")
+        if previous_stamp and previous_stamp != stamp and os.path.exists(stale):
+            os.remove(stale)
+
     with open(STATE, "w", encoding="utf-8", newline="\n") as fh:
-        json.dump({"fingerprint": fingerprint, "updated": stamp}, fh, indent=2)
+        json.dump({"fingerprint": fingerprint, "stamp": stamp,
+                   "updated": int(time.time())}, fh, indent=2)
         fh.write("\n")
 
     print("card updated")
