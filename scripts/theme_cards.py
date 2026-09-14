@@ -81,7 +81,7 @@ SECTIONS = [
     ("listening", "spotify --now-playing --follow", "currently listening"),
     ("building", "cat ~/ventures/*.md", "what i'm building"),
     ("hire", 'mail -s "engagement" aryan@bugsnaps.in', "need a pentest"),
-    ("find", "finger 4ryanwalia", "where to find me"),
+    ("find", "myrecon --sweep 4ryanwalia", "where to find me"),
     ("whoami", "whoami --verify", "whoami"),
     ("kit", "ls ~/field-kit", "the field kit"),
     ("ps", "ps aux | grep aryan", "what is running"),
