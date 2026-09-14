@@ -1,0 +1,5 @@
+# Renders the "Sponsor" button at the top of every repo that carries this file.
+# GitHub Sponsors is already enabled on the account; Buy Me a Coffee is the
+# no-account-needed route for people who just want to drop a tip.
+github: [4ryanwalia]
+buy_me_a_coffee: 4ryanwalia

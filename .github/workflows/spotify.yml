@@ -1,0 +1,60 @@
+name: Spotify card
+
+# Refreshes the now-playing card on the profile README.
+#
+# The refresh token lives in this repository's secrets and is read only by the
+# stdlib script in scripts/. Nothing is sent to a third-party service, and the
+# job installs no packages — there is no supply chain between the token and
+# the API call.
+
+on:
+  schedule:
+    # Every 10 minutes. GitHub queues scheduled runs, so treat this as "about
+    # every 10 minutes" rather than a guarantee. The script skips the commit
+    # entirely when the track has not changed, so quiet nights cost nothing.
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/spotify_card.py"
+      - ".github/workflows/spotify.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: spotify-card
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Ask Spotify what is playing
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+        run: python scripts/spotify_card.py
+
+      - name: Commit only if the track actually changed
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No change — skipping commit."
+            exit 0
+          fi
+          # Authored by the bot on purpose: a card refresh is not a
+          # contribution and has no business colouring the contribution graph.
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore(spotify): refresh now-playing card"
+          git push
