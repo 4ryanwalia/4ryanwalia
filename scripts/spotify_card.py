@@ -463,6 +463,17 @@ def main() -> int:
         print("unchanged - nothing to commit")
         return 0
 
+    # Never trade a real card for a placeholder. If the credentials go missing
+    # -- a blanked secret, a revoked token -- the honest move is to leave the
+    # last real reading in place and complain in the log, not to publish
+    # "awaiting credentials" over a working profile.
+    if data.get("state") == "unconfigured" and os.path.exists(
+            os.path.join(ASSETS, "spotify-dark.svg")):
+        print("credentials missing - keeping the existing card", file=sys.stderr)
+        print("check SPOTIFY_CLIENT_ID / _SECRET / _REFRESH_TOKEN are non-empty",
+              file=sys.stderr)
+        return 1
+
     data["art_uri"] = fetch_art(data.get("art", ""))
     os.makedirs(ASSETS, exist_ok=True)
     for theme in ("dark", "light"):
