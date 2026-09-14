@@ -9,10 +9,12 @@ name: Spotify card
 
 on:
   schedule:
-    # Every 10 minutes. GitHub queues scheduled runs, so treat this as "about
-    # every 10 minutes" rather than a guarantee. The script skips the commit
-    # entirely when the track has not changed, so quiet nights cost nothing.
-    - cron: "*/10 * * * *"
+    # Every 5 minutes, which is GitHub's floor. Treat it as a ceiling on
+    # freshness, not a promise: scheduled runs are queued on shared runners and
+    # routinely land 15-40 minutes apart under load. The card carries the time
+    # it was taken so a stale one cannot lie about being live. The script skips
+    # the commit when the track has not changed, so quiet nights cost nothing.
+    - cron: "*/5 * * * *"
   workflow_dispatch:
   push:
     branches: [main]

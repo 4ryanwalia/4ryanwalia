@@ -130,8 +130,9 @@ def access_token(cid: str, secret: str, refresh: str) -> str:
 
 
 def fetch_art(url: str):
-    """Inline the cover as a data URI. GitHub's image proxy will not fetch a
-    remote href from inside an SVG, so embedding is the only thing that works."""
+    """Inline the cover as a data URI. An SVG loaded through an <img> tag
+    renders in the browser's restricted static mode, which blocks every external
+    fetch it attempts, so embedding is the only thing that works."""
     if not url:
         return None
     try:
@@ -350,9 +351,16 @@ def card(d: dict, theme: str) -> str:
                 '<animate attributeName="r" values="3.5;4.6;3.5" dur="1.9s" repeatCount="indefinite"/>'
                 "</circle>"
             )
+        # The scheduler can leave this card sitting for half an hour. Without a
+        # timestamp a frozen progress bar under a NOW PLAYING label asserts
+        # something live that may be long over, so say when it was true.
+        fetched = datetime.now(timezone.utc).strftime("%H:%M")
         out.append(
             f'<text x="{bar_x}" y="152" font-family="{MONO}" font-size="9.5" '
             f'fill="{c["mute"]}">{ms(pos)}</text>'
+            f'<text x="{bar_x + bar_w / 2}" y="152" text-anchor="middle" '
+            f'font-family="{MONO}" font-size="9" fill="{c["mute"]}">'
+            f'as of {fetched} utc</text>'
             f'<text x="{bar_x + bar_w}" y="152" text-anchor="end" font-family="{MONO}" '
             f'font-size="9.5" fill="{c["mute"]}">{ms(dur)}</text>'
         )

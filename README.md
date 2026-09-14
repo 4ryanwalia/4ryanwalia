@@ -47,7 +47,9 @@ beats a bigger one that is partly fiction.
 ## `$ myrecon --stream audio`
 
 Straight off the Spotify Web API — the track playing right now, or the last one
-if I've stopped. The card below rebuilds itself every ten minutes.
+if I've stopped. It is a snapshot rather than a stream, so it carries the time
+it was taken; a card claiming to be live without saying when would be the exact
+thing I built MyRecon to avoid.
 
 <!-- SPOTIFY:START -->
 <!-- rewritten by .github/workflows/spotify.yml - edit the script, not this block -->
