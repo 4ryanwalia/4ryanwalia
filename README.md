@@ -1,55 +1,13 @@
-<p align="center">
-  <img src="./assets/banner.svg" width="860" alt="Terminal running myrecon --target 4ryanwalia --deep --verify. Identity: Aryan Walia, confirmed. Role: penetration tester, CEH, confirmed. Building: BugSnaps and MyRecon, confirmed.">
-</p>
+<h1 align="center">hey, i'm aryan 🚩</h1>
 
 <p align="center">
-  <a href="https://bugsnaps.in"><img alt="BugSnaps — offensive security" src="https://img.shields.io/badge/BugSnaps-offensive%20security-4a8bf7?style=for-the-badge&labelColor=0a0f1a"></a>
-  <a href="https://www.myrecon.xyz"><img alt="MyRecon — OSINT platform" src="https://img.shields.io/badge/MyRecon-OSINT%20platform-34d399?style=for-the-badge&labelColor=0a0f1a"></a>
-  <a href="https://hackerone.com/4ryanwalia"><img alt="HackerOne profile" src="https://img.shields.io/badge/HackerOne-4ryanwalia-f59e0b?style=for-the-badge&labelColor=0a0f1a"></a>
-  <a href="mailto:aryan@bugsnaps.in"><img alt="Email" src="https://img.shields.io/badge/aryan@bugsnaps.in-e8eef7?style=for-the-badge&labelColor=0a0f1a"></a>
+  <b>penetration tester</b> · founder of <a href="https://bugsnaps.in">BugSnaps</a> and <a href="https://www.myrecon.xyz">MyRecon</a> · <code>CEH</code><br>
+  <sub>i build tools that refuse to guess</sub>
 </p>
 
 ---
 
-## `$ whoami`
-
-I'm **Aryan Walia** — a penetration tester who got tired of reports that list
-possibilities as though they were findings, and started building tools that
-refuse to guess.
-
-That habit became a company and a product. **[BugSnaps](https://bugsnaps.in)** is
-my offensive security practice: application and infrastructure testing against
-the OWASP methodology, with remediation a development team can actually act on
-instead of a PDF of raw scanner output. **[MyRecon](https://www.myrecon.xyz)** is
-what happened when I pointed the same discipline at OSINT — it reports what it
-can support, at the confidence it can support it, and says plainly when it
-doesn't know.
-
-That last part is rarer than it should be. Run a username through most tools in
-this category and you get a wall of green ticks; click a few and the accounts
-aren't there. So MyRecon measures instead of assuming — we request a handle we
-know is real and a string of nonsense nobody could have registered, compare the
-two responses byte for byte, and any platform that returns the same page for
-both gets labelled honestly or excluded. A smaller platform count that is true
-beats a bigger one that is partly fiction.
-
-<table>
-<tr><td><b>Role</b></td><td>Penetration tester · Founder</td><td><code>CONFIRMED</code></td></tr>
-<tr><td><b>Certification</b></td><td>Certified Ethical Hacker — passed first attempt</td><td><code>CONFIRMED</code></td></tr>
-<tr><td><b>Education</b></td><td>Master's degree, NMIMS Mumbai</td><td><code>CONFIRMED</code></td></tr>
-<tr><td><b>Shipping</b></td><td>MyRecon on the web and on Google Play</td><td><code>CONFIRMED</code></td></tr>
-<tr><td><b>Handle</b></td><td><code>4ryanwalia</code> — same on nearly every platform</td><td><code>CONFIRMED</code></td></tr>
-<tr><td><b>Location</b></td><td>India · UTC+05:30</td><td><code>SELF-REPORTED</code></td></tr>
-</table>
-
----
-
-## `$ myrecon --stream audio`
-
-Straight off the Spotify Web API — the track playing right now, or the last one
-if I've stopped. It is a snapshot rather than a stream, so it carries the time
-it was taken; a card claiming to be live without saying when would be the exact
-thing I built MyRecon to avoid.
+## 🎧 currently listening
 
 <!-- SPOTIFY:START -->
 <!-- rewritten by .github/workflows/spotify.yml - edit the script, not this block -->
@@ -64,25 +22,92 @@ thing I built MyRecon to avoid.
 </p>
 <!-- SPOTIFY:END -->
 
-<sub>
-
-**How it works, since you asked.** No third-party widget service holds my
-refresh token. A [GitHub Action](./.github/workflows/spotify.yml) runs a
-[stdlib-only Python script](./scripts/spotify_card.py) that refreshes the token,
-asks Spotify what's playing, inlines the album art as a data URI, and renders
-the SVG you're looking at. Zero dependencies installed, so there's no supply
-chain sitting between the secret and the API call — which felt like the only
-defensible way to do this given the day job. It commits only when the track
-actually changes, and commits as the bot, so it never colours my contribution
-graph green for listening to music.
-
-</sub>
+<p align="center"><sub>
+straight off the Spotify Web API. it's a snapshot rather than a stream, so it
+tells you when it was taken instead of pretending to be live.
+</sub></p>
 
 ---
 
-## `$ ls ~/field-kit`
+## 🏗️ what i'm building
 
-**Offensive security**
+**[BugSnaps](https://bugsnaps.in)** — my penetration testing and offensive security
+practice. Application and infrastructure testing against the OWASP methodology,
+for growing businesses that need findings their developers can actually act on
+rather than a PDF of raw scanner output.
+
+**[MyRecon](https://www.myrecon.xyz)** — an OSINT platform that came out of the day
+job. Username sweeps across 100+ platforms, email breach exposure, and domain,
+DNS and IP investigation. On the web, on Google Play, and backed by a breach
+archive that updates daily. Passwords are hashed in your browser, so they never
+leave your device.
+
+---
+
+## 📬 need a pentest?
+
+I take on application and infrastructure security work, plus
+[footprint removal](https://www.myrecon.xyz/services.html) for people who need
+their personal data off the open web.
+
+<p align="center">
+  <a href="mailto:aryan@bugsnaps.in"><img alt="Email aryan@bugsnaps.in" src="https://img.shields.io/badge/hire%20me-aryan@bugsnaps.in-4a8bf7?style=for-the-badge&labelColor=0a0f1a"></a>
+</p>
+
+Same address for a result you think is wrong — those are the most useful
+messages I get. If a platform reports something MyRecon missed, or reports one
+that isn't real, tell me and I'll measure it.
+
+---
+
+## 🔗 where to find me
+
+<p align="center">
+  <a href="https://bugsnaps.in"><img alt="BugSnaps" src="https://img.shields.io/badge/BugSnaps-offensive%20security-4a8bf7?style=for-the-badge&labelColor=0a0f1a"></a>
+  <a href="https://www.myrecon.xyz"><img alt="MyRecon" src="https://img.shields.io/badge/MyRecon-OSINT%20platform-34d399?style=for-the-badge&labelColor=0a0f1a"></a>
+  <a href="https://hackerone.com/4ryanwalia"><img alt="HackerOne" src="https://img.shields.io/badge/HackerOne-4ryanwalia-f59e0b?style=for-the-badge&logo=hackerone&logoColor=white&labelColor=0a0f1a"></a>
+</p>
+<p align="center">
+  <a href="https://www.instagram.com/4ryanwalia"><img alt="Instagram" src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white&labelColor=0a0f1a"></a>
+  <a href="https://open.spotify.com/user/31zbuvzhd6mp2cjl3zeed7x2bamu"><img alt="Spotify" src="https://img.shields.io/badge/Spotify-1DB954?style=for-the-badge&logo=spotify&logoColor=white&labelColor=0a0f1a"></a>
+  <a href="https://play.google.com/store/apps/details?id=makeme.aryan.makeme"><img alt="Google Play" src="https://img.shields.io/badge/Google%20Play-414141?style=for-the-badge&logo=googleplay&logoColor=white&labelColor=0a0f1a"></a>
+</p>
+
+---
+
+## 🕵️ `$ whoami`
+
+<p align="center">
+  <img src="./assets/banner.svg" width="860" alt="Terminal running myrecon --target 4ryanwalia --deep --verify. Identity: Aryan Walia, confirmed. Role: penetration tester, CEH, confirmed. Building: BugSnaps and MyRecon, confirmed. Location: India, self-reported.">
+</p>
+
+Mapping an organisation's attack surface and mapping a person's public
+footprint are the same exercise with a different subject. You enumerate what is
+reachable, verify what is real, and discard what only looks like a finding. The
+third step is the one almost every OSINT tool skips.
+
+Run a username through most tools in this category and you get a wall of green
+ticks. Click a few and you find pages saying the account isn't there. That
+isn't a small annoyance — it makes the whole output unusable, because if you
+can't tell which results are real you have to check all of them by hand, and at
+that point the tool has saved you nothing.
+
+So MyRecon measures instead of assuming. To test whether a platform can be
+checked reliably we request a handle we know is real and a string of nonsense
+nobody could have registered, then compare the responses byte for byte. Several
+well-known platforms return literally identical pages for both. Those get
+labelled honestly or excluded — a smaller platform count that is true is worth
+more than a bigger one that is partly fiction.
+
+<table>
+<tr><td><b>Role</b></td><td>Penetration tester · Founder</td><td><code>CONFIRMED</code></td></tr>
+<tr><td><b>Certification</b></td><td>Certified Ethical Hacker — passed first attempt</td><td><code>CONFIRMED</code></td></tr>
+<tr><td><b>Education</b></td><td>Master's degree, NMIMS Mumbai</td><td><code>CONFIRMED</code></td></tr>
+<tr><td><b>Handle</b></td><td><code>4ryanwalia</code> — same on nearly every platform</td><td><code>CONFIRMED</code></td></tr>
+<tr><td><b>Location</b></td><td>India · UTC+05:30</td><td><code>SELF-REPORTED</code></td></tr>
+</table>
+
+### `$ ls ~/field-kit`
 
 ![Burp Suite](https://img.shields.io/badge/Burp%20Suite-FF6633?style=flat-square&logo=burpsuite&logoColor=white)
 ![Nmap](https://img.shields.io/badge/Nmap-4a8bf7?style=flat-square&logo=gnometerminal&logoColor=white)
@@ -91,54 +116,59 @@ graph green for listening to music.
 ![OWASP](https://img.shields.io/badge/OWASP-000000?style=flat-square&logo=owasp&logoColor=white)
 ![Kali](https://img.shields.io/badge/Kali%20Linux-557C94?style=flat-square&logo=kalilinux&logoColor=white)
 
-**Build**
-
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)
-
-**Run**
-
-![Render](https://img.shields.io/badge/Render-46E3B7?style=flat-square&logo=render&logoColor=black)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
-![Play Store](https://img.shields.io/badge/Google%20Play-414141?style=flat-square&logo=googleplay&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 
----
-
-## `$ ps aux | grep aryan`
+### `$ ps aux | grep aryan`
 
 | | What it is | Stack |
 |---|---|---|
-| **[MyRecon](https://github.com/4ryanwalia/Myrecon)** | Username sweeps across 100+ platforms, email breach exposure, domain/DNS/IP investigation. Web app, Android app, and a daily-updated breach archive. Passwords are hashed in your browser, so they never leave the device. | `Kotlin` `Python` `JS` |
+| **[MyRecon](https://github.com/4ryanwalia/Myrecon)** | Username sweeps across 100+ platforms, email breach exposure, domain/DNS/IP investigation. Web app, Android app, and a daily-updated breach archive. | `Kotlin` `Python` `JS` |
 | **[Cryptoji / Coffin](https://github.com/4ryanwalia/Coffin)** | Hybrid-encrypted messages encoded as emoji sequences. Premium burial services for your digital secrets. | `Django` `React` |
 | **[KINDA-EDR](https://github.com/4ryanwalia/KINDA-EDR)** | Endpoint detection and response, small enough to read end to end. | `Python` |
 | **[Phishing Detection](https://github.com/4ryanwalia/Phishing-detection)** | Classifies a URL as phishing or legitimate from real-world features rather than a blocklist. | `Python` `Jupyter` |
 | **[Photo Retrieval](https://github.com/4ryanwalia/intelligent-photo-retrieval)** | Hand it one selfie and it finds you in a folder of event photos using facial embeddings. | `Python` `Streamlit` |
 | **[WhisperDesk](https://github.com/4ryanwalia/WhisperDesk)** | Role-based complaint management with genuinely anonymous submissions and live status tracking. | `Spring Boot` `JWT` `MySQL` |
 
-I also publish the research behind MyRecon rather than keeping it as an
-advantage, because the failure mode it describes affects every tool in the
-category — [including mine](https://www.myrecon.xyz/guides/why-username-checkers-report-fake-accounts.html).
-
 ---
 
-## `$ git log --stat`
+## 📡 `$ myrecon --scan self --telemetry`
 
 <p align="center">
-  <img height="165" alt="GitHub statistics" src="https://github-readme-stats.vercel.app/api?username=4ryanwalia&show_icons=true&include_all_commits=true&hide_border=true&bg_color=0a0f1a&title_color=4a8bf7&text_color=9aabc4&icon_color=34d399&ring_color=4a8bf7">
-  <img height="165" alt="Most used languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=4ryanwalia&layout=compact&langs_count=8&hide_border=true&bg_color=0a0f1a&title_color=4a8bf7&text_color=9aabc4">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/contributions-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/contributions-light.svg">
+    <img src="./assets/contributions-dark.svg" alt="A year of contributions drawn as a radar scope, with a sweep crossing the grid" width="740">
+  </picture>
 </p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/stats-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/stats-light.svg">
+    <img src="./assets/stats-dark.svg" alt="Telemetry panel: contributions, public repositories, stars earned, longest run, and languages by volume" width="740">
+  </picture>
+</p>
+
+<p align="center"><sub>
+
+Both panels are rendered from GitHub's own GraphQL API by
+<a href="./scripts/stats_card.py">a script in this repo</a>, not by a
+third-party stats service. The usual one was returning <code>503</code> when I
+checked — which is exactly the problem with hanging your profile off someone
+else's free deployment.
+
+</sub></p>
 
 ---
 
-## `$ sudo fund --coffee`
+## ☕ `$ sudo fund --coffee`
 
 MyRecon is free, keyless where it can be, and has no paywall on the part that
 matters. If it saved you an afternoon of manual checking — or if the breach
@@ -152,26 +182,4 @@ verification work.
   <a href="https://www.buymeacoffee.com/4ryanwalia"><img alt="Buy me a coffee" src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black&labelColor=0a0f1a"></a>
 </p>
 
----
-
-## `$ contact --verified`
-
-Email is the reliable route. I'm `4ryanwalia` nearly everywhere else.
-
-<p align="center">
-  <a href="mailto:aryan@bugsnaps.in"><b>aryan@bugsnaps.in</b></a> &nbsp;·&nbsp;
-  <a href="https://bugsnaps.in">bugsnaps.in</a> &nbsp;·&nbsp;
-  <a href="https://www.myrecon.xyz">myrecon.xyz</a> &nbsp;·&nbsp;
-  <a href="https://hackerone.com/4ryanwalia">HackerOne</a> &nbsp;·&nbsp;
-  <a href="https://open.spotify.com/user/31zbuvzhd6mp2cjl3zeed7x2bamu">Spotify</a>
-</p>
-
-<sub>
-
-Best message you can send me is a result you think is wrong. If a platform
-reports something MyRecon missed, or reports one that isn't real, tell me and
-I'll measure it.
-
-</sub>
-
-<p align="center"><sub><code>scan complete · 6 attributes confirmed · 1 self-reported · 0 inferred</code></sub></p>
+<p align="center"><sub><code>scan complete · 4 attributes confirmed · 1 self-reported · 0 inferred</code></sub></p>

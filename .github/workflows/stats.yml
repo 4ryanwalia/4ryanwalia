@@ -1,0 +1,55 @@
+name: Profile stats
+
+# Renders the contribution scope and the telemetry panel from GitHub's own
+# GraphQL API. Exists because the public github-readme-stats instance answers
+# 503 often enough that a profile depending on it is blank a lot of the time.
+
+on:
+  schedule:
+    # Once a day is plenty — contributions do not move minute to minute, and a
+    # daily commit keeps the history readable.
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/stats_card.py"
+      - ".github/workflows/stats.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-stats
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Render the panels
+        env:
+          # PROFILE_TOKEN is optional: set it to a PAT with read:user if the
+          # built-in token is refused at contributionsCollection.
+          PROFILE_TOKEN: ${{ secrets.PROFILE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/stats_card.py
+
+      - name: Commit only if the numbers moved
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No change — skipping commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore(stats): refresh contribution scope and telemetry"
+          git push
