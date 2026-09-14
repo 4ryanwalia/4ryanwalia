@@ -9,11 +9,11 @@
 <!-- SPOTIFY:START -->
 <!-- rewritten by .github/workflows/spotify.yml - edit the script, not this block -->
 <p align="center">
-  <a href="https://open.spotify.com/">
+  <a href="https://open.spotify.com/track/1Cbl3Yq8rHo7hhDQmLQagU">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-dark.svg?v=1789402670">
-      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-light.svg?v=1789402670">
-      <img src="./assets/spotify-dark.svg?v=1789402670" alt="Feed not configured yet" width="480">
+      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-dark.svg?v=1789403034">
+      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-light.svg?v=1789403034">
+      <img src="./assets/spotify-dark.svg?v=1789403034" alt="Playing right now: PUSH 2 START — Tyla" width="480">
     </picture>
   </a>
 </p>
