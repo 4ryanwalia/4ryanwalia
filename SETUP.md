@@ -34,26 +34,28 @@ Then visit `https://github.com/4ryanwalia` — the README is on the profile.
 4. Tick **Web API**, save, then open **Settings** and copy the **Client ID**
    and **Client secret**.
 
-### 2b. Get a refresh token
+### 2b. Get a token and store it, in one go
 
 ```bash
 python scripts/get_refresh_token.py
 ```
 
-It asks for the two values, opens Spotify in your browser, catches the
-redirect on 127.0.0.1, and prints a refresh token. It runs entirely on your
-machine and talks to nobody but `accounts.spotify.com`. Run it once; the token
-does not expire on its own.
+It asks for the client ID and secret, opens Spotify in **your** browser so you
+log in yourself, catches the redirect on 127.0.0.1, and exchanges the code for
+a refresh token. Then it offers to pipe all three values into `gh secret set`
+over stdin — so the token is never printed, never written to disk, and never
+enters your shell history. Answer `n` and it prints the token instead, for
+machines without `gh`.
 
-### 2c. Store the three secrets
+Nothing here ever sees your Spotify password: that is the entire point of the
+OAuth redirect. The script talks to `accounts.spotify.com` and to `gh`, and to
+nothing else. Run it once; the refresh token does not expire on its own.
 
-**Settings → Secrets and variables → Actions → New repository secret**, or:
+If you would rather set the secrets by hand, they are
+`SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` and `SPOTIFY_REFRESH_TOKEN` under
+**Settings → Secrets and variables → Actions**.
 
-```bash
-gh secret set SPOTIFY_CLIENT_ID --repo 4ryanwalia/4ryanwalia && gh secret set SPOTIFY_CLIENT_SECRET --repo 4ryanwalia/4ryanwalia && gh secret set SPOTIFY_REFRESH_TOKEN --repo 4ryanwalia/4ryanwalia
-```
-
-### 2d. Kick it off
+### 2c. Kick it off
 
 ```bash
 gh workflow run "Spotify card" --repo 4ryanwalia/4ryanwalia && gh run watch --repo 4ryanwalia/4ryanwalia
