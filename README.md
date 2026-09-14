@@ -54,11 +54,11 @@ thing I built MyRecon to avoid.
 <!-- SPOTIFY:START -->
 <!-- rewritten by .github/workflows/spotify.yml - edit the script, not this block -->
 <p align="center">
-  <a href="https://open.spotify.com/track/27Rw5LbQZlB56yPKMcBiD2">
+  <a href="https://open.spotify.com/track/3c7Ctlw9MKlIQPxRH3fOTt">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-dark.svg?v=1789398426">
-      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-light.svg?v=1789398426">
-      <img src="./assets/spotify-dark.svg?v=1789398426" alt="Playing right now: Music to Watch Boys To x I Wanna Be Yours — Treyvik" width="480">
+      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-dark.svg?v=1789398554">
+      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-light.svg?v=1789398554">
+      <img src="./assets/spotify-dark.svg?v=1789398554" alt="Playing right now: Man in the Mirror - 2012 Remaster — Michael Jackson" width="480">
     </picture>
   </a>
 </p>
