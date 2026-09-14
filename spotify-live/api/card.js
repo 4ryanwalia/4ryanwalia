@@ -277,20 +277,52 @@ function card(d, themeName) {
     const dur = Math.max(1, d.duration || 1);
     const pos = Math.min(dur, d.progress || 0);
     const filled = (barW * pos) / dur;
-    out.push(
-      `<rect x="${barX}" y="${barY}" width="${barW}" height="4" rx="2" fill="${c.track}"/>` +
-      `<rect x="${barX}" y="${barY}" width="${filled.toFixed(1)}" height="4" rx="2" fill="${c.accent}"/>`
-    );
+    out.push(`<rect x="${barX}" y="${barY}" width="${barW}" height="4" rx="2" fill="${c.track}"/>`);
+
     if (live) {
-      out.push(`<circle cx="${(barX + filled).toFixed(1)}" cy="${barY + 2}" r="3.5" fill="${c.accent}"><animate attributeName="r" values="3.5;4.6;3.5" dur="1.9s" repeatCount="indefinite"/></circle>`);
+      // This endpoint renders per request, so `pos` is exact at page load.
+      // From there the bar and the counter run on the viewer's own clock --
+      // the only way a static image can keep time, since nothing in a README
+      // is allowed to poll. It is a projection from a true starting point:
+      // skip the track and a reload puts it right.
+      const remaining = Math.min(dur - pos, 600000); // cap the animation at 10m
+      const secs = Math.max(1, Math.round(remaining / 1000));
+      const endFilled = (barW * (pos + remaining)) / dur;
+
+      out.push(
+        `<rect x="${barX}" y="${barY}" width="${filled.toFixed(1)}" height="4" rx="2" fill="${c.accent}">` +
+        `<animate attributeName="width" from="${filled.toFixed(1)}" to="${endFilled.toFixed(1)}" dur="${secs}s" fill="freeze"/>` +
+        `</rect>`
+      );
+      out.push(
+        `<circle cy="${barY + 2}" r="3.5" fill="${c.accent}">` +
+        `<animate attributeName="cx" from="${(barX + filled).toFixed(1)}" to="${(barX + endFilled).toFixed(1)}" dur="${secs}s" fill="freeze"/>` +
+        `<animate attributeName="r" values="3.5;4.6;3.5" dur="1.9s" repeatCount="indefinite"/>` +
+        `</circle>`
+      );
+
+      // SMIL cannot animate text content, so the elapsed readout is one text
+      // node per second, each revealed for exactly its own second.
+      const startSec = Math.floor(pos / 1000);
+      let frames = "";
+      for (let i = 0; i <= secs; i++) {
+        frames +=
+          `<text x="${barX}" y="152" font-family="${MONO}" font-size="9.5" fill="${c.mute}" opacity="0">` +
+          `${ms((startSec + i) * 1000)}<set attributeName="opacity" to="1" begin="${i}s" dur="1s"/></text>`;
+      }
+      out.push(frames);
+      out.push(
+        `<circle cx="${barX + barW / 2 - 24}" cy="149" r="3" fill="${c.ok}">` +
+        `<animate attributeName="opacity" values="1;0.25;1" dur="2s" repeatCount="indefinite"/></circle>` +
+        `<text x="${barX + barW / 2 - 16}" y="152" font-family="${MONO}" font-size="9" letter-spacing="0.08em" fill="${c.ok}">LIVE</text>`
+      );
+    } else {
+      out.push(`<rect x="${barX}" y="${barY}" width="${filled.toFixed(1)}" height="4" rx="2" fill="${c.accent}"/>`);
+      out.push(`<text x="${barX}" y="152" font-family="${MONO}" font-size="9.5" fill="${c.mute}">${ms(pos)}</text>`);
+      out.push(`<text x="${barX + barW / 2}" y="152" text-anchor="middle" font-family="${MONO}" font-size="9" fill="${c.mute}">paused · ${new Date().toISOString().slice(11, 16)} utc</text>`);
     }
-    // Rendered per request, so this really is "now" -- but it still says so,
-    // because a proxy between here and the reader may hold it for a minute.
-    out.push(
-      `<text x="${barX}" y="152" font-family="${MONO}" font-size="9.5" fill="${c.mute}">${ms(pos)}</text>` +
-      `<text x="${barX + barW / 2}" y="152" text-anchor="middle" font-family="${MONO}" font-size="9" fill="${c.mute}">live · ${new Date().toISOString().slice(11, 16)} utc</text>` +
-      `<text x="${barX + barW}" y="152" text-anchor="end" font-family="${MONO}" font-size="9.5" fill="${c.mute}">${ms(dur)}</text>`
-    );
+
+    out.push(`<text x="${barX + barW}" y="152" text-anchor="end" font-family="${MONO}" font-size="9.5" fill="${c.mute}">${ms(dur)}</text>`);
   } else {
     out.push(`<text x="${colX}" y="140" font-family="${MONO}" font-size="9.5" fill="${c.mute}">source: spotify web api · live at ${new Date().toISOString().slice(11, 16)} utc</text>`);
   }
@@ -326,3 +358,6 @@ export default async function handler(req, res) {
   res.setHeader("Expires", "0");
   res.status(200).send(card(data, theme));
 }
+
+// Exported for the render test in scratch; the HTTP entry point is default.
+export { card };
