@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """One-time helper: trade a Spotify login for a long-lived refresh token.
 
-Run it once on your own machine, paste the result into a repository secret,
-and never run it again. Stdlib only, like the card renderer — the client
-secret you type here goes to accounts.spotify.com and nowhere else.
+Run it once on your own machine and never again. You log in to Spotify in
+your own browser; this script never sees a password. By default it hands the
+resulting credentials straight to `gh secret set` over stdin, so the token is
+never printed, never written to disk, and never lands in shell history.
+
+Stdlib only, like the card renderer — the client secret you type goes to
+accounts.spotify.com and nowhere else.
 
     python scripts/get_refresh_token.py
 
@@ -19,6 +23,7 @@ import http.server
 import json
 import secrets
 import ssl
+import subprocess
 import sys
 import threading
 import urllib.parse
@@ -112,12 +117,53 @@ def main() -> int:
         print("No refresh token came back: " + json.dumps(payload), file=sys.stderr)
         return 1
 
+    print("\nGot a refresh token.\n")
+    answer = input(
+        "Push all three straight into the repo secrets with gh, without\n"
+        "printing them anywhere? [Y/n]: "
+    ).strip().lower()
+
+    if answer in ("", "y", "yes"):
+        return store(client_id, client_secret, token)
+
+    # Fallback for anyone without gh. Printing a live credential to a terminal
+    # puts it in scrollback and shell history, so it is not the default.
     print("\n" + "=" * 62)
     print("SPOTIFY_REFRESH_TOKEN")
     print(token)
     print("=" * 62)
-    print("\nStore it as a repository secret. Do not commit it, and do not")
-    print("paste it anywhere that keeps history.\n")
+    print("\nStore it as a repository secret, then clear your scrollback.\n")
+    return 0
+
+
+def store(client_id: str, client_secret: str, token: str) -> int:
+    """Hand each value to `gh` over stdin.
+
+    Over stdin rather than --body on purpose: an argument is visible in the
+    process list to anything else running on the machine, and stdin is not.
+    """
+    repo = input("Repository [4ryanwalia/4ryanwalia]: ").strip() or "4ryanwalia/4ryanwalia"
+    pairs = (
+        ("SPOTIFY_CLIENT_ID", client_id),
+        ("SPOTIFY_CLIENT_SECRET", client_secret),
+        ("SPOTIFY_REFRESH_TOKEN", token),
+    )
+    for name, value in pairs:
+        proc = subprocess.run(
+            ["gh", "secret", "set", name, "--repo", repo],
+            input=value.encode(), capture_output=True,
+        )
+        if proc.returncode != 0:
+            err = proc.stderr.decode(errors="replace").strip()
+            print(f"Failed to set {name}: {err}", file=sys.stderr)
+            print("Is gh installed and authenticated? Try: gh auth status",
+                  file=sys.stderr)
+            return 1
+        print(f"  set {name}")
+
+    print("\nAll three stored. Nothing was printed and nothing was written to")
+    print("disk. Kick off the first run with:\n")
+    print(f'  gh workflow run "Spotify card" --repo {repo}\n')
     return 0
 
 
