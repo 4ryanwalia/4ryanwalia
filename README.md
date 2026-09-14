@@ -2,9 +2,9 @@
   <img src="./assets/hero.svg" width="860" alt="hey, i'm ARYAN. Offensive security and OSINT. I find the red flags before someone worse does. Penetration tester, CEH, founder of BugSnaps and MyRecon.">
 </p>
 
----
-
-## 🎧 currently listening
+<p align="center">
+  <img src="./assets/hdr-listening.svg" width="860" alt="currently listening">
+</p>
 
 <!-- SPOTIFY:START -->
 <!-- Drawn by spotify-live/api/card.js at the moment you load this page, not on
@@ -21,9 +21,9 @@
 </p>
 <!-- SPOTIFY:END -->
 
----
-
-## 🏗️ what i'm building
+<p align="center">
+  <img src="./assets/hdr-building.svg" width="860" alt="what i'm building">
+</p>
 
 **[BugSnaps](https://bugsnaps.in)** — my penetration testing and offensive security
 practice. Application and infrastructure testing against the OWASP methodology,
@@ -36,40 +36,40 @@ DNS and IP investigation. On the web, on Google Play, and backed by a breach
 archive that updates daily. Passwords are hashed in your browser, so they never
 leave your device.
 
----
-
-## 📬 need a pentest?
+<p align="center">
+  <img src="./assets/hdr-hire.svg" width="860" alt="need a pentest?">
+</p>
 
 I take on application and infrastructure security work, plus
 [footprint removal](https://www.myrecon.xyz/services.html) for people who need
 their personal data off the open web.
 
 <p align="center">
-  <a href="mailto:aryan@bugsnaps.in"><img alt="Email aryan@bugsnaps.in" src="https://img.shields.io/badge/hire%20me-aryan@bugsnaps.in-4a8bf7?style=for-the-badge&labelColor=0a0f1a"></a>
+  <a href="mailto:aryan@bugsnaps.in"><img src="./assets/link-email.svg" height="38" alt="hire me: aryan@bugsnaps.in"></a>
 </p>
 
 Same address for a result you think is wrong — those are the most useful
 messages I get. If a platform reports something MyRecon missed, or reports one
 that isn't real, tell me and I'll measure it.
 
----
-
-## 🔗 where to find me
-
 <p align="center">
-  <a href="https://bugsnaps.in"><img alt="BugSnaps" src="https://img.shields.io/badge/BugSnaps-offensive%20security-4a8bf7?style=for-the-badge&labelColor=0a0f1a"></a>
-  <a href="https://www.myrecon.xyz"><img alt="MyRecon" src="https://img.shields.io/badge/MyRecon-OSINT%20platform-34d399?style=for-the-badge&labelColor=0a0f1a"></a>
-  <a href="https://hackerone.com/4ryanwalia"><img alt="HackerOne" src="https://img.shields.io/badge/HackerOne-4ryanwalia-f59e0b?style=for-the-badge&logo=hackerone&logoColor=white&labelColor=0a0f1a"></a>
-</p>
-<p align="center">
-  <a href="https://www.instagram.com/4ryanwalia"><img alt="Instagram" src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white&labelColor=0a0f1a"></a>
-  <a href="https://open.spotify.com/user/31zbuvzhd6mp2cjl3zeed7x2bamu"><img alt="Spotify" src="https://img.shields.io/badge/Spotify-1DB954?style=for-the-badge&logo=spotify&logoColor=white&labelColor=0a0f1a"></a>
-  <a href="https://play.google.com/store/apps/details?id=makeme.aryan.makeme"><img alt="Google Play" src="https://img.shields.io/badge/Google%20Play-414141?style=for-the-badge&logo=googleplay&logoColor=white&labelColor=0a0f1a"></a>
+  <img src="./assets/hdr-find.svg" width="860" alt="where to find me">
 </p>
 
----
+<p align="center">
+  <a href="https://bugsnaps.in"><img src="./assets/link-bugsnaps.svg" height="38" alt="BugSnaps: offensive security"></a>
+  <a href="https://www.myrecon.xyz"><img src="./assets/link-myrecon.svg" height="38" alt="MyRecon: OSINT platform"></a>
+  <a href="https://hackerone.com/4ryanwalia"><img src="./assets/link-hackerone.svg" height="38" alt="HackerOne: 4ryanwalia"></a>
+</p>
+<p align="center">
+  <a href="https://www.instagram.com/4ryanwalia"><img src="./assets/link-instagram.svg" height="38" alt="Instagram: 4ryanwalia"></a>
+  <a href="https://open.spotify.com/user/31zbuvzhd6mp2cjl3zeed7x2bamu"><img src="./assets/link-spotify.svg" height="38" alt="Spotify: now playing"></a>
+  <a href="https://play.google.com/store/apps/details?id=makeme.aryan.makeme"><img src="./assets/link-googleplay.svg" height="38" alt="Google Play: MyRecon"></a>
+</p>
 
-## 🕵️ `$ whoami`
+<p align="center">
+  <img src="./assets/hdr-whoami.svg" width="860" alt="whoami">
+</p>
 
 <p align="center">
   <img src="./assets/banner.svg" width="860" alt="Terminal running myrecon --target 4ryanwalia --deep --verify. Identity: Aryan Walia, confirmed. Role: penetration tester, CEH, confirmed. Building: BugSnaps and MyRecon, confirmed.">
@@ -100,25 +100,17 @@ more than a bigger one that is partly fiction.
 <tr><td><b>Handle</b></td><td><code>4ryanwalia</code> — same on nearly every platform</td><td><code>CONFIRMED</code></td></tr>
 </table>
 
-### `$ ls ~/field-kit`
+<p align="center">
+  <img src="./assets/hdr-kit.svg" width="860" alt="the field kit">
+</p>
 
-![Burp Suite](https://img.shields.io/badge/Burp%20Suite-FF6633?style=flat-square&logo=burpsuite&logoColor=white)
-![Nmap](https://img.shields.io/badge/Nmap-4a8bf7?style=flat-square&logo=gnometerminal&logoColor=white)
-![Wireshark](https://img.shields.io/badge/Wireshark-1679A7?style=flat-square&logo=wireshark&logoColor=white)
-![Metasploit](https://img.shields.io/badge/Metasploit-2596CD?style=flat-square&logo=metasploit&logoColor=white)
-![OWASP](https://img.shields.io/badge/OWASP-000000?style=flat-square&logo=owasp&logoColor=white)
-![Kali](https://img.shields.io/badge/Kali%20Linux-557C94?style=flat-square&logo=kalilinux&logoColor=white)
+<p align="center">
+  <img src="./assets/kit.svg" width="860" alt="Field kit. security: Burp Suite, Nmap, Wireshark, Metasploit, OWASP, Kali Linux. build: Python, Kotlin, Flask, Django, Spring Boot, React, Jetpack Compose, GitHub Actions">
+</p>
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white)
-![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
-![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
-
-### `$ ps aux | grep aryan`
+<p align="center">
+  <img src="./assets/hdr-ps.svg" width="860" alt="what is running">
+</p>
 
 | | What it is | Stack |
 |---|---|---|
@@ -129,9 +121,9 @@ more than a bigger one that is partly fiction.
 | **[Photo Retrieval](https://github.com/4ryanwalia/intelligent-photo-retrieval)** | Hand it one selfie and it finds you in a folder of event photos using facial embeddings. | `Python` `Streamlit` |
 | **[WhisperDesk](https://github.com/4ryanwalia/WhisperDesk)** | Role-based complaint management with genuinely anonymous submissions and live status tracking. | `Spring Boot` `JWT` `MySQL` |
 
----
-
-## 📡 `$ myrecon --scan self --telemetry`
+<p align="center">
+  <img src="./assets/hdr-telemetry.svg" width="860" alt="telemetry">
+</p>
 
 <p align="center">
   <picture>
@@ -160,13 +152,16 @@ Both panels are rendered from GitHub's own GraphQL API by
 <a href="./scripts/stats_card.py">a script in this repo</a>, not by a
 third-party stats service. The usual one was returning <code>503</code> when I
 checked — which is exactly the problem with hanging your profile off someone
-else's free deployment.
+else's free deployment. The section headers, chips and links are drawn by
+<a href="./scripts/theme_cards.py">another one</a> for the same reason: apart
+from the Spotify card, which is my own endpoint, this page makes no request to
+anybody else's server to render itself.
 
 </sub></p>
 
----
-
-## ☕ `$ sudo fund --coffee`
+<p align="center">
+  <img src="./assets/hdr-fund.svg" width="860" alt="buy me a coffee">
+</p>
 
 <p align="center">
   <img src="./assets/fund.svg" width="740" alt="What the tin pays for: hosting on Render and Vercel, platform verification work, and the daily breach archive rebuild.">
@@ -176,9 +171,8 @@ If MyRecon saved you an afternoon of manual checking — or the breach archive
 told you something you needed to know — you can put something in the tin.
 
 <p align="center">
-  <a href="https://github.com/sponsors/4ryanwalia"><img alt="Sponsor 4ryanwalia on GitHub" src="https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white&labelColor=0a0f1a"></a>
-  &nbsp;
-  <a href="https://www.buymeacoffee.com/4ryanwalia"><img alt="Buy me a coffee" src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black&labelColor=0a0f1a"></a>
+  <a href="https://github.com/sponsors/4ryanwalia"><img src="./assets/link-sponsor.svg" height="38" alt="Sponsor: GitHub Sponsors"></a>
+  <a href="https://www.buymeacoffee.com/4ryanwalia"><img src="./assets/link-coffee.svg" height="38" alt="Buy me a coffee: buymeacoffee.com"></a>
 </p>
 
 <p align="center"><sub><code>scan complete · 4 attributes confirmed · 0 inferred</code></sub></p>
