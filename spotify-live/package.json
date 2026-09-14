@@ -1,0 +1,6 @@
+{
+  "name": "spotify-live",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" }
+}

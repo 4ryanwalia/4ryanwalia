@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 212" width="740" height="212" role="img" aria-label="What the tin pays for: hosting, platform verification, and the breach archive.">
+  <title>What the tin pays for</title>
+  <defs>
+    <linearGradient id="brew" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b45309"/>
+      <stop offset="1" stop-color="#78350f"/>
+    </linearGradient>
+    <radialGradient id="warm" cx="0.16" cy="0.5" r="0.6">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#111a2b" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="tin"><rect width="740" height="212" rx="12"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#tin)">
+    <rect width="740" height="212" fill="#111a2b"/>
+    <rect width="740" height="212" fill="url(#warm)"/>
+  </g>
+  <rect x="0.5" y="0.5" width="739" height="211" rx="12" fill="none" stroke="#1f2b42"/>
+
+  <!-- Steam. Three strands, each drifting up on its own clock so it never
+       reads as a loop. -->
+  <g stroke="#7d8aa3" stroke-width="2.5" stroke-linecap="round" fill="none">
+    <path d="M78,72 C72,60 86,54 80,42 C76,34 82,28 80,22" opacity="0">
+      <animate attributeName="opacity" values="0;0.55;0.5;0" dur="3.4s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0,6; 0,-10" dur="3.4s" repeatCount="indefinite"/>
+    </path>
+    <path d="M104,70 C98,58 112,52 106,40 C102,32 108,26 106,18" opacity="0">
+      <animate attributeName="opacity" values="0;0.5;0.45;0" dur="4.1s" begin="0.7s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0,6; 0,-12" dur="4.1s" begin="0.7s" repeatCount="indefinite"/>
+    </path>
+    <path d="M130,74 C124,62 138,56 132,44 C128,36 134,30 132,24" opacity="0">
+      <animate attributeName="opacity" values="0;0.42;0.38;0" dur="3.8s" begin="1.6s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0,6; 0,-11" dur="3.8s" begin="1.6s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Cup -->
+  <path d="M138,96 C160,98 166,108 164,120 C162,133 150,138 136,138" fill="none" stroke="#2c3c5a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M62,88 L142,88 L134,158 C133,166 127,171 119,171 L85,171 C77,171 71,166 70,158 Z" fill="#16223a" stroke="#2c3c5a" stroke-width="2"/>
+  <ellipse cx="102" cy="88" rx="40" ry="7.5" fill="url(#brew)"/>
+  <ellipse cx="102" cy="88" rx="40" ry="7.5" fill="none" stroke="#2c3c5a" stroke-width="2"/>
+  <ellipse cx="102" cy="182" rx="56" ry="8" fill="#0d1526"/>
+  <ellipse cx="102" cy="182" rx="56" ry="8" fill="none" stroke="#1f2b42"/>
+
+  <!-- What it pays for -->
+  <text x="212" y="50" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" letter-spacing="0.16em" font-weight="700" fill="#f59e0b">WHAT THE TIN PAYS FOR</text>
+
+  <g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12.5">
+    <rect x="212" y="78" width="7" height="7" rx="1.5" fill="#4a8bf7"/>
+    <text x="232" y="86" fill="#e8eef7" font-weight="700">hosting</text>
+    <text x="352" y="86" font-family="ui-sans-serif,system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#9aabc4">an always-warm API on Render, CDN on Vercel</text>
+
+    <rect x="212" y="112" width="7" height="7" rx="1.5" fill="#34d399"/>
+    <text x="232" y="120" fill="#e8eef7" font-weight="700">verification</text>
+    <text x="352" y="120" font-family="ui-sans-serif,system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#9aabc4">measuring which platforms can actually be checked</text>
+
+    <rect x="212" y="146" width="7" height="7" rx="1.5" fill="#f43f5e"/>
+    <text x="232" y="154" fill="#e8eef7" font-weight="700">breach archive</text>
+    <text x="352" y="154" font-family="ui-sans-serif,system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#9aabc4">the catalogue that rebuilds itself every day</text>
+  </g>
+
+  <line x1="212" y1="172" x2="716" y2="172" stroke="#1f2b42"/>
+  <text x="212" y="192" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" fill="#7d8aa3">free, keyless where it can be, and no paywall on the part that matters</text>
+</svg>

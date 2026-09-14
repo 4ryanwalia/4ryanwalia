@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 250" width="860" height="250" role="img" aria-label="hey, i'm aryan. Red flag by trade. I find your data before someone worse does. Penetration tester, CEH, founder of BugSnaps and MyRecon.">
-  <title>hey, i'm aryan 🚩</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 250" width="860" height="250" role="img" aria-label="hey, i'm ARYAN. Offensive security and OSINT. I find the red flags before someone worse does. Penetration tester, CEH, founder of BugSnaps and MyRecon.">
+  <title>hey, i'm ARYAN 🚩</title>
   <defs>
     <radialGradient id="glow" cx="0.82" cy="0.22" r="0.85">
       <stop offset="0" stop-color="#f43f5e" stop-opacity="0.26"/>
@@ -27,25 +27,25 @@
   <!-- Kicker: explains the flag before the joke lands. -->
   <g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">
     <rect x="46" y="38" width="3" height="15" fill="#f43f5e"/>
-    <text x="60" y="51" font-size="12" letter-spacing="0.22em" font-weight="700" fill="#f43f5e">RED FLAG // BY TRADE</text>
+    <text x="60" y="51" font-size="12" letter-spacing="0.22em" font-weight="700" fill="#f43f5e">OFFENSIVE SECURITY // OSINT</text>
   </g>
 
   <!-- Chromatic-aberration ghosts behind the headline, jittering on a loop. -->
   <g font-family="'Arial Black','Helvetica Neue',Impact,system-ui,sans-serif" font-weight="900" font-size="62" letter-spacing="-0.022em">
-    <text x="44" y="129" fill="#f43f5e" opacity="0.62">hey, i'm aryan
+    <text x="44" y="129" fill="#f43f5e" opacity="0.62">hey, i'm ARYAN
       <animateTransform attributeName="transform" type="translate" calcMode="discrete"
         values="-3,0; 2,1; -4,0; 0,0; 0,0; 0,0; 3,-1; 0,0; 0,0; 0,0; 0,0; 0,0"
         dur="3.6s" repeatCount="indefinite"/>
     </text>
-    <text x="44" y="129" fill="#22d3ee" opacity="0.5">hey, i'm aryan
+    <text x="44" y="129" fill="#22d3ee" opacity="0.5">hey, i'm ARYAN
       <animateTransform attributeName="transform" type="translate" calcMode="discrete"
         values="3,0; -2,-1; 4,1; 0,0; 0,0; 0,0; -3,0; 0,0; 0,0; 0,0; 0,0; 0,0"
         dur="3.6s" repeatCount="indefinite"/>
     </text>
-    <text x="44" y="129" fill="#ffffff">hey, i'm aryan <tspan font-size="50">🚩</tspan></text>
+    <text x="44" y="129" fill="#ffffff">hey, i'm ARYAN <tspan font-size="50">🚩</tspan></text>
   </g>
 
-  <text x="46" y="171" font-family="ui-sans-serif,system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="19" fill="#cbd5e1">i find your data before someone worse does.</text>
+  <text x="46" y="171" font-family="ui-sans-serif,system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="19" fill="#cbd5e1">i find the red flags before someone worse does.</text>
 
   <line x1="46" y1="194" x2="814" y2="194" stroke="#1f2b42"/>
   <text x="46" y="220" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12.5" fill="#7d8aa3">penetration tester<tspan fill="#2c3c5a"> · </tspan>CEH<tspan fill="#2c3c5a"> · </tspan>founder of <tspan fill="#4a8bf7">BugSnaps</tspan> + <tspan fill="#34d399">MyRecon</tspan></text>

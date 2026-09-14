@@ -171,11 +171,12 @@ else's free deployment.
 
 ## ☕ `$ sudo fund --coffee`
 
-MyRecon is free, keyless where it can be, and has no paywall on the part that
-matters. If it saved you an afternoon of manual checking — or if the breach
-archive told you something you needed to know — you can put something in the
-tin. It goes straight back into hosting and the next batch of platform
-verification work.
+<p align="center">
+  <img src="./assets/fund.svg" width="740" alt="What the tin pays for: hosting on Render and Vercel, platform verification work, and the daily breach archive rebuild.">
+</p>
+
+If MyRecon saved you an afternoon of manual checking — or the breach archive
+told you something you needed to know — you can put something in the tin.
 
 <p align="center">
   <a href="https://github.com/sponsors/4ryanwalia"><img alt="Sponsor 4ryanwalia on GitHub" src="https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white&labelColor=0a0f1a"></a>
