@@ -1,7 +1,7 @@
 # Setup
 
 Three things to do once. The profile works the moment you push — the Spotify
-card just shows "awaiting credentials" until you finish step 2.
+card just says "awaiting credentials" until you finish step 2.
 
 ---
 
@@ -34,7 +34,7 @@ Then visit `https://github.com/4ryanwalia` — the README is on the profile.
 4. Tick **Web API**, save, then open **Settings** and copy the **Client ID**
    and **Client secret**.
 
-### 2b. Get a token and store it, in one go
+### 2b. Get a token and load it everywhere, in one go
 
 ```bash
 python scripts/get_refresh_token.py
@@ -42,27 +42,40 @@ python scripts/get_refresh_token.py
 
 It asks for the client ID and secret, opens Spotify in **your** browser so you
 log in yourself, catches the redirect on 127.0.0.1, and exchanges the code for
-a refresh token. Then it offers to pipe all three values into `gh secret set`
-over stdin — so the token is never printed, never written to disk, and never
-enters your shell history. Answer `n` and it prints the token instead, for
-machines without `gh`.
+a refresh token. Then it pipes all three values into `gh secret set` *and*
+`vercel env add` over stdin — so the token is never printed, never written to
+disk, and never enters your shell history — redeploys the live endpoint, and
+checks that the endpoint stops saying "awaiting credentials". Answer `n` at the
+prompt and it prints the refresh token instead, for machines without `gh`.
+
+Two destinations because there are two renderers, and they are not equals:
+
+- **Vercel** runs `spotify-live/api/card.js`, which is what the README points
+  at. It asks Spotify when someone loads your profile.
+- **GitHub Actions** runs `scripts/spotify_card.py`, which renders the same
+  card into `assets/`. It is the fallback, and it only runs when you press the
+  button.
 
 Nothing here ever sees your Spotify password: that is the entire point of the
-OAuth redirect. The script talks to `accounts.spotify.com` and to `gh`, and to
-nothing else. Run it once; the refresh token does not expire on its own.
+OAuth redirect. The script talks to `accounts.spotify.com`, to `gh` and to
+`vercel`, and to nothing else. Run it once; the refresh token does not expire
+on its own.
 
-If you would rather set the secrets by hand, they are
-`SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` and `SPOTIFY_REFRESH_TOKEN` under
-**Settings → Secrets and variables → Actions**.
+If you would rather set them by hand, the names are `SPOTIFY_CLIENT_ID`,
+`SPOTIFY_CLIENT_SECRET` and `SPOTIFY_REFRESH_TOKEN`, in two places: the repo's
+**Settings → Secrets and variables → Actions**, and the Vercel project's
+**Settings → Environment Variables** (Production). Vercel bakes them in at
+build time, so redeploy after changing them or the running function keeps the
+old values.
 
-### 2c. Kick it off
+### 2c. Check it
 
 ```bash
-gh workflow run "Spotify card" --repo 4ryanwalia/4ryanwalia && gh run watch --repo 4ryanwalia/4ryanwalia
+curl -s "https://spotify-live-seven.vercel.app/card.svg" | head -c 160
 ```
 
-Play something first, or the card will correctly report your last track
-instead of a live one.
+You want `aria-label="NOW PLAYING: ...`. Play something first, or the card will
+correctly report your last track instead of a live one.
 
 ---
 
@@ -83,42 +96,61 @@ file into.
 
 ## How the Spotify card actually works
 
+The README points at a Vercel function, not at a file in this repo:
+
 | | |
 |---|---|
-| **Trigger** | `.github/workflows/spotify.yml`, every ~10 min plus manual dispatch |
+| **Trigger** | someone loads your profile |
+| **Renderer** | `spotify-live/api/card.js` — no dependencies, one file |
+| **Output** | an SVG streamed straight to the browser, `no-store` |
+| **Token custody** | Vercel environment variables → the function → Spotify. No third-party widget host in the path. |
+
+and keeps a fallback that does it the slow way:
+
+| | |
+|---|---|
+| **Trigger** | `.github/workflows/spotify.yml`, **manual dispatch only** |
 | **Renderer** | `scripts/spotify_card.py` — Python standard library only, zero `pip install` |
-| **Output** | `assets/spotify-dark.svg`, `assets/spotify-light.svg`, and the block between the `SPOTIFY:START` / `SPOTIFY:END` markers in `README.md` |
+| **Output** | `assets/spotify-*.svg`, and a rewrite of the block between the `SPOTIFY:START` / `SPOTIFY:END` markers in `README.md` |
 | **Commits** | only when the track changes, authored by `github-actions[bot]` so your contribution graph stays honest |
-| **Token custody** | GitHub Actions secrets → the script → Spotify. No third-party widget host in the path. |
+
+Running that workflow **replaces the live card with a static one** — that is
+its job. It has no cron for exactly that reason. Use it if the endpoint ever
+has to be abandoned; otherwise leave it alone.
 
 **Album art is inlined as a base64 data URI.** That is not decoration. An SVG
 loaded through an `<img>` tag renders in the browser's restricted static mode,
 which blocks every external resource the document tries to fetch — so a linked
 cover URL renders blank for everyone, no matter how it is served.
 
-**The `?v=` query string is a cache-buster.** Images living in this repo are
-served from `github.com/4ryanwalia/4ryanwalia/raw/main/...` behind a CDN rather
-than through Camo, but it caches all the same; the script rewrites the README
-`srcset`s with a fresh timestamp each run so a new card is actually fetched.
+**The animation is real, the clock is a projection.** Declarative SMIL survives
+restricted static mode even though scripting does not, so the equaliser, the
+progress bar and the per-second elapsed counter all run in the reader's
+browser. The starting point is exact — the function asked Spotify as the image
+was fetched — and from there the bar runs on the reader's own clock, because
+nothing inside a README is allowed to poll. Skip a track and a reload puts it
+right.
 
-**Failures are silent on purpose.** If Spotify returns a 502 or the token
-refresh hiccups, the script exits cleanly and leaves the last good card in
-place. A transient upstream error should not blank your profile.
+**How fresh "live" really is.** The function is exact and sends `no-store`.
+GitHub proxies external README images through Camo, which is a cache, and
+`no-store` is the strongest available way of asking it not to hold a copy — not
+a guarantee. That is why the card prints the time it was drawn rather than
+claiming to be live without evidence.
+
+**Failures are honest, not silent.** If Spotify 502s or the token refresh
+hiccups, the endpoint still returns a valid card that says so, with HTTP 200. A
+500 would show your profile a broken-image icon.
 
 ### Editing the card
 
-Change `scripts/spotify_card.py` — the `THEMES` dict for colours, `card()` for
-layout. Never edit the block between the README markers; the next run
-overwrites it.
+Change `spotify-live/api/card.js` — the `THEMES` object for colours, `card()`
+for layout — then `cd spotify-live && vercel --prod`. Never edit the block
+between the README markers by hand unless you have retired the endpoint; the
+fallback workflow overwrites it.
 
-Render locally without touching the repo secrets:
-
-```bash
-python scripts/spotify_card.py
-```
-
-With no credentials in the environment it writes the "awaiting credentials"
-card, which is a quick way to check layout changes.
+`scripts/spotify_card.py` is the fallback's renderer and is a separate
+implementation of the same design. If you change one and care about the
+fallback, change both.
 
 ---
 
@@ -127,7 +159,7 @@ card, which is a quick way to check layout changes.
 - **`assets/banner.svg`** — hand-written animated SVG, no generator service.
   The line reveals are SMIL `<animate>` on clip rects; edit the `begin` values
   in `<defs>` to retime them.
-- **GitHub stats cards** come from the public `github-readme-stats` instance,
-  which is rate-limited and occasionally 429s. If it gets flaky, deploy your
-  own from <https://github.com/anuraghazra/github-readme-stats> and swap the
-  two hostnames in `README.md`.
+- **The stats panel** is rendered in-repo by `scripts/stats_card.py` on the
+  schedule in `.github/workflows/stats.yml`. It used to come from the public
+  `github-readme-stats` instance, which was returning 503; nothing on this
+  profile depends on a third-party widget host any more.

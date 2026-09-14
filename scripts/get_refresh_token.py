@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
-"""One-time helper: trade a Spotify login for a long-lived refresh token.
+"""One-time helper: trade a Spotify login for a long-lived refresh token,
+then load it into both places that need it.
 
 Run it once on your own machine and never again. You log in to Spotify in
 your own browser; this script never sees a password. By default it hands the
-resulting credentials straight to `gh secret set` over stdin, so the token is
-never printed, never written to disk, and never lands in shell history.
+resulting credentials straight to `gh secret set` and `vercel env add` over
+stdin, so the token is never printed, never written to disk, and never lands
+in shell history.
+
+Two destinations because there are two renderers:
+
+  * Vercel  — the live endpoint the README points at, which asks Spotify at
+              the moment someone loads the profile.
+  * GitHub  — the Action that renders the same card into ./assets, kept as a
+              fallback if the endpoint ever has to be abandoned.
 
 Stdlib only, like the card renderer — the client secret you type goes to
 accounts.spotify.com and nowhere else.
@@ -21,11 +30,15 @@ from __future__ import annotations
 import base64
 import http.server
 import json
+import os
 import secrets
+import shutil
 import ssl
 import subprocess
 import sys
 import threading
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import webbrowser
@@ -36,6 +49,15 @@ SCOPES = "user-read-currently-playing user-read-recently-played user-read-playba
 AUTH = "https://accounts.spotify.com/authorize"
 TOKEN = "https://accounts.spotify.com/api/token"
 CTX = ssl.create_default_context()
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LIVE_DIR = os.path.join(ROOT, "spotify-live")
+# The project's stable production alias. Vercel also gives every deployment its
+# own immutable URL, but those change on each push; this is the one the README
+# is allowed to hardcode.
+LIVE_CARD = "https://spotify-live-seven.vercel.app/card.svg"
+
+NAMES = ("SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET", "SPOTIFY_REFRESH_TOKEN")
 
 result: dict = {}
 done = threading.Event()
@@ -119,8 +141,8 @@ def main() -> int:
 
     print("\nGot a refresh token.\n")
     answer = input(
-        "Push all three straight into the repo secrets with gh, without\n"
-        "printing them anywhere? [Y/n]: "
+        "Push all three into Vercel and the repo secrets, and redeploy the\n"
+        "live endpoint, without printing them anywhere? [Y/n]: "
     ).strip().lower()
 
     if answer in ("", "y", "yes"):
@@ -136,35 +158,116 @@ def main() -> int:
     return 0
 
 
-def store(client_id: str, client_secret: str, token: str) -> int:
-    """Hand each value to `gh` over stdin.
+def run(exe: str, *args, **kw) -> subprocess.CompletedProcess:
+    """Invoke a CLI by absolute path.
 
-    Over stdin rather than --body on purpose: an argument is visible in the
-    process list to anything else running on the machine, and stdin is not.
+    Windows ships `vercel` as a .cmd shim, and CreateProcess cannot execute one
+    directly, so a bare ["vercel", ...] raises WinError 193. Resolving through
+    shutil.which honours PATHEXT, and a shim gets handed to cmd.exe. Never
+    shell=True: these calls carry a live credential on stdin and a shell would
+    put the surrounding command line in reach of quoting bugs.
     """
+    path = shutil.which(exe)
+    if not path:
+        raise FileNotFoundError(exe)
+    argv = [path, *args]
+    if os.name == "nt" and path.lower().endswith((".cmd", ".bat")):
+        argv = ["cmd", "/c", *argv]
+    return subprocess.run(argv, capture_output=True, **kw)
+
+
+def store(client_id: str, client_secret: str, token: str) -> int:
+    """Hand each value to `gh` and `vercel` over stdin.
+
+    Over stdin rather than an argument on purpose: an argument is visible in
+    the process list to anything else running on the machine, and stdin is not.
+    """
+    pairs = tuple(zip(NAMES, (client_id, client_secret, token)))
+
     repo = input("Repository [4ryanwalia/4ryanwalia]: ").strip() or "4ryanwalia/4ryanwalia"
-    pairs = (
-        ("SPOTIFY_CLIENT_ID", client_id),
-        ("SPOTIFY_CLIENT_SECRET", client_secret),
-        ("SPOTIFY_REFRESH_TOKEN", token),
-    )
+    print("\ngithub — fallback Action")
     for name, value in pairs:
-        proc = subprocess.run(
-            ["gh", "secret", "set", name, "--repo", repo],
-            input=value.encode(), capture_output=True,
-        )
+        proc = run("gh", "secret", "set", name, "--repo", repo, input=value.encode())
         if proc.returncode != 0:
             err = proc.stderr.decode(errors="replace").strip()
-            print(f"Failed to set {name}: {err}", file=sys.stderr)
-            print("Is gh installed and authenticated? Try: gh auth status",
+            print(f"  ! failed to set {name}: {err}", file=sys.stderr)
+            print("    Is gh installed and authenticated? Try: gh auth status",
                   file=sys.stderr)
             return 1
         print(f"  set {name}")
 
-    print("\nAll three stored. Nothing was printed and nothing was written to")
-    print("disk. Kick off the first run with:\n")
-    print(f'  gh workflow run "Spotify card" --repo {repo}\n')
+    if vercel(pairs) != 0:
+        return 1
+
+    print("\nAll set. Nothing was printed and nothing was written to disk.")
     return 0
+
+
+def vercel(pairs) -> int:
+    """Load the same three values into the live endpoint and redeploy.
+
+    Vercel bakes environment variables in at build time, so setting them
+    without a redeploy leaves the running function exactly as unconfigured as
+    it was.
+    """
+    print("\nvercel — live endpoint")
+    if not shutil.which("vercel"):
+        print("  ! vercel CLI not found. Install it with:  npm i -g vercel",
+              file=sys.stderr)
+        print("    Then re-run this script, or set the three variables by hand.",
+              file=sys.stderr)
+        return 1
+    if not os.path.isdir(os.path.join(LIVE_DIR, ".vercel")):
+        print(f"  ! {LIVE_DIR} is not linked to a Vercel project.", file=sys.stderr)
+        print("    Run `vercel link` in that directory first.", file=sys.stderr)
+        return 1
+
+    for name, value in pairs:
+        # Remove first: `env add` refuses to overwrite, and a re-run of this
+        # script after a rotated secret is the normal case, not an edge one.
+        run("vercel", "env", "rm", name, "production", "--yes", cwd=LIVE_DIR)
+        proc = run("vercel", "env", "add", name, "production",
+                   cwd=LIVE_DIR, input=value.encode())
+        if proc.returncode != 0:
+            err = proc.stderr.decode(errors="replace").strip()
+            print(f"  ! failed to set {name}: {err}", file=sys.stderr)
+            return 1
+        print(f"  set {name}")
+
+    print("  redeploying so the build picks them up…")
+    proc = run("vercel", "--prod", "--yes", cwd=LIVE_DIR)
+    if proc.returncode != 0:
+        print("  ! deploy failed: " + proc.stderr.decode(errors="replace").strip(),
+              file=sys.stderr)
+        return 1
+
+    return verify()
+
+
+def verify() -> int:
+    """Confirm the endpoint now answers with a real card.
+
+    Worth the extra few seconds: the failure this catches -- credentials set
+    but not picked up -- is invisible from the terminal and very visible on
+    the profile.
+    """
+    print("  checking " + LIVE_CARD)
+    for attempt in range(6):
+        try:
+            with urllib.request.urlopen(LIVE_CARD, timeout=20, context=CTX) as r:
+                head = r.read(400).decode("utf-8", "replace")
+        except (urllib.error.URLError, TimeoutError) as exc:
+            head = f"(unreachable: {exc})"
+        if "AWAITING CREDENTIALS" not in head and "<svg" in head:
+            label = head.split("aria-label=\"", 1)[-1].split(":", 1)[0]
+            print(f"  live — the card reads {label!r}")
+            return 0
+        if attempt < 5:
+            time.sleep(5)
+
+    print("  ! the endpoint still reports it has no credentials.", file=sys.stderr)
+    print("    Check them with:  vercel env ls production", file=sys.stderr)
+    return 1
 
 
 if __name__ == "__main__":

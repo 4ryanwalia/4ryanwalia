@@ -7,13 +7,15 @@
 ## 🎧 currently listening
 
 <!-- SPOTIFY:START -->
-<!-- rewritten by .github/workflows/spotify.yml - edit the script, not this block -->
+<!-- Drawn by spotify-live/api/card.js at the moment you load this page, not on
+     a schedule. .github/workflows/spotify.yml can rewrite this block back to
+     the static ./assets cards if the endpoint ever has to go; it only runs on
+     a manual dispatch now. -->
 <p align="center">
-  <a href="https://open.spotify.com/track/0bkW98npv8EsWQ2fXFzK56">
+  <a href="https://open.spotify.com/user/31zbuvzhd6mp2cjl3zeed7x2bamu">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-e5a2c7ebd0-dark.svg">
-      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-e5a2c7ebd0-light.svg">
-      <img src="./assets/spotify-e5a2c7ebd0-dark.svg" alt="Paused mid-track: From Eden — Hozier" width="480">
+      <source media="(prefers-color-scheme: light)" srcset="https://spotify-live-seven.vercel.app/card.svg?theme=light">
+      <img src="https://spotify-live-seven.vercel.app/card.svg" alt="What I am listening to on Spotify, drawn when this page loaded" width="480">
     </picture>
   </a>
 </p>

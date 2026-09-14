@@ -49,13 +49,39 @@ function textWidth(s, size) {
   return total * size;
 }
 
-function fit(s, size, maxW) {
-  if (textWidth(s, size) <= maxW) return s;
-  let out = s;
-  while (out.length && textWidth(out + "…", size) > maxW) {
-    out = out.slice(0, -1);
-  }
-  return out.trimEnd() + "…";
+/**
+ * A line that scrolls itself when it is too long to fit.
+ *
+ * Truncating a title to "Everything In Its Right Pl…" loses the one thing the
+ * card exists to say. SMIL cannot animate text content, but it can animate a
+ * transform, so the full string is drawn inside a clip window and slid: hold,
+ * travel, hold, return. Lines that already fit are emitted as plain text and
+ * cost nothing.
+ */
+function line(s, { x, y, size, weight, fill, maxW, clipId }) {
+  const attrs =
+    `x="${x}" y="${y}" font-family="${FONT}" font-size="${size}"` +
+    (weight ? ` font-weight="${weight}"` : "") + ` fill="${fill}"`;
+  const w = textWidth(s, size);
+  if (w <= maxW) return `<text ${attrs}>${esc(s)}</text>`;
+
+  const shift = w - maxW + 10;
+  const hold = 2.4;
+  const travel = Math.max(2.6, shift / 24); // ~24px a second, readable
+  const total = hold * 2 + travel * 2;
+  const keys = [0, hold, hold + travel, hold * 2 + travel, total]
+    .map((t) => (t / total).toFixed(4)).join(";");
+
+  return (
+    `<clipPath id="${clipId}">` +
+    `<rect x="${x}" y="${(y - size * 1.05).toFixed(1)}" width="${maxW}" height="${(size * 1.5).toFixed(1)}"/>` +
+    `</clipPath>` +
+    `<g clip-path="url(#${clipId})"><text ${attrs}>${esc(s)}` +
+    `<animateTransform attributeName="transform" type="translate" ` +
+    `values="0,0;0,0;${-shift.toFixed(1)},0;${-shift.toFixed(1)},0;0,0" ` +
+    `keyTimes="${keys}" dur="${total.toFixed(1)}s" repeatCount="indefinite"/>` +
+    `</text></g>`
+  );
 }
 
 function esc(s) {
@@ -177,6 +203,34 @@ async function collect() {
   return { state: "silent" };
 }
 
+/**
+ * Hold the last answer for a few seconds on a warm instance.
+ *
+ * A profile that gets linked somewhere busy would otherwise spend one Spotify
+ * round trip, plus an album-art download, on every single view -- enough to
+ * meet a 429 from Spotify and to burn the function budget for no gain. The
+ * window is short, and the progress counter is advanced by hand across it, so
+ * a served copy is still correct to the second rather than merely recent.
+ */
+const TTL_MS = 6000;
+let memo = null;
+
+async function collectFresh() {
+  if (memo && Date.now() - memo.at < TTL_MS) {
+    const d = { ...memo.data };
+    if (d.state === "playing") {
+      const dur = d.duration || 0;
+      const advanced = (d.progress || 0) + (Date.now() - memo.at);
+      d.progress = dur ? Math.min(dur, advanced) : advanced;
+    }
+    return d;
+  }
+  const data = await collect();
+  data.artUri = await fetchArt(data.art);
+  memo = { at: Date.now(), data };
+  return data;
+}
+
 // ----------------------------------------------------------------- render
 
 function logo(x, y, c) {
@@ -193,7 +247,13 @@ function equaliser(x, base, c, live) {
   return [11, 16, 7, 13, 9].map((h, i) => {
     const bx = x + i * 5.5;
     if (!live) {
-      return `<rect x="${bx}" y="${base - 4}" width="3" height="4" rx="1.5" fill="${c.mute}"/>`;
+      // Still breathing, just not playing. A frozen row of bars reads as a
+      // broken image; a slow pulse says the card rendered for this page view.
+      return (
+        `<rect x="${bx}" y="${base - 4}" width="3" height="4" rx="1.5" fill="${c.mute}" opacity="0.35">` +
+        `<animate attributeName="opacity" values="0.35;0.75;0.35" dur="${(2.4 + i * 0.25).toFixed(2)}s" repeatCount="indefinite"/>` +
+        `</rect>`
+      );
     }
     const dur = 0.72 + i * 0.17;
     return (
@@ -249,6 +309,10 @@ function card(d, themeName) {
     `<linearGradient id="fade" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c.accent}" stop-opacity="0.30"/><stop offset="1" stop-color="#1DB954" stop-opacity="0.18"/></linearGradient></defs>`,
     `<rect width="${W}" height="${H}" rx="12" fill="${c.card}"/>`,
     `<rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="12" fill="none" stroke="${c.border}"/>`,
+    // Everything above is the frame; everything below fades in on each render.
+    // Camo re-fetches this image, so the fade is a visible receipt that the
+    // card was drawn for this page view rather than served from a cache.
+    `<g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.45s" fill="freeze"/>`,
   ];
 
   if (d.artUri) {
@@ -260,14 +324,20 @@ function card(d, themeName) {
     );
   }
   out.push(`<rect x="20.5" y="${artY + 0.5}" width="${ART - 1}" height="${ART - 1}" rx="9" fill="none" stroke="${c.border}"/>`);
+  if (live) {
+    out.push(
+      `<rect x="18.5" y="${artY - 1.5}" width="${ART + 3}" height="${ART + 3}" rx="10.5" fill="none" stroke="${c.ok}" stroke-width="1.5">` +
+      `<animate attributeName="opacity" values="0.14;0.62;0.14" dur="2.6s" repeatCount="indefinite"/></rect>`
+    );
+  }
 
   out.push(logo(W - 34, 30, c));
   out.push(equaliser(colX, 46, c, live));
   out.push(`<text x="${colX + 33}" y="46" font-family="${MONO}" font-size="10.5" letter-spacing="0.09em" font-weight="700" fill="${labelFill}">${esc(label)}</text>`);
-  out.push(`<text x="${colX}" y="74" font-family="${FONT}" font-size="15.5" font-weight="700" fill="${c.text}">${esc(fit(title, 15.5, colW))}</text>`);
-  out.push(`<text x="${colX}" y="95" font-family="${FONT}" font-size="12.5" fill="${c.dim}">${esc(fit(artist, 12.5, colW))}</text>`);
+  out.push(line(title, { x: colX, y: 74, size: 15.5, weight: 700, fill: c.text, maxW: colW, clipId: "l1" }));
+  out.push(line(artist, { x: colX, y: 95, size: 12.5, fill: c.dim, maxW: colW, clipId: "l2" }));
   if (album) {
-    out.push(`<text x="${colX}" y="113" font-family="${FONT}" font-size="11" fill="${c.mute}">${esc(fit(album, 11, colW))}</text>`);
+    out.push(line(album, { x: colX, y: 113, size: 11, fill: c.mute, maxW: colW, clipId: "l3" }));
   }
 
   const barX = colX;
@@ -303,14 +373,18 @@ function card(d, themeName) {
 
       // SMIL cannot animate text content, so the elapsed readout is one text
       // node per second, each revealed for exactly its own second.
+      // One text node per second, each revealed for exactly its own second.
+      // The shared attributes live on the wrapping group rather than on every
+      // frame: a ten-minute track is 600 of these, and repeating the font
+      // stack on each one roughly triples the bytes GitHub has to fetch.
       const startSec = Math.floor(pos / 1000);
-      let frames = "";
+      let frames = `<g font-family="${MONO}" font-size="9.5" fill="${c.mute}">`;
       for (let i = 0; i <= secs; i++) {
         frames +=
-          `<text x="${barX}" y="152" font-family="${MONO}" font-size="9.5" fill="${c.mute}" opacity="0">` +
+          `<text x="${barX}" y="152" opacity="0">` +
           `${ms((startSec + i) * 1000)}<set attributeName="opacity" to="1" begin="${i}s" dur="1s"/></text>`;
       }
-      out.push(frames);
+      out.push(frames + "</g>");
       out.push(
         `<circle cx="${barX + barW / 2 - 24}" cy="149" r="3" fill="${c.ok}">` +
         `<animate attributeName="opacity" values="1;0.25;1" dur="2s" repeatCount="indefinite"/></circle>` +
@@ -327,6 +401,7 @@ function card(d, themeName) {
     out.push(`<text x="${colX}" y="140" font-family="${MONO}" font-size="9.5" fill="${c.mute}">source: spotify web api · live at ${new Date().toISOString().slice(11, 16)} utc</text>`);
   }
 
+  out.push("</g>");
   out.push("</svg>");
   return out.join("");
 }
@@ -341,12 +416,12 @@ export default async function handler(req, res) {
 
   let data;
   try {
-    data = await collect();
-    data.artUri = await fetchArt(data.art);
+    data = await collectFresh();
   } catch (err) {
     // Render an honest card rather than a broken image. A 500 here would show
     // the reader a broken-image icon on the profile.
     console.error("spotify:", err?.message || err);
+    memo = null; // never cache a failure; the next view retries for real
     data = { state: "error" };
   }
 

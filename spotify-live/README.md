@@ -12,46 +12,62 @@ environment variables and `api/card.js`.
 
 ---
 
-## Deploy
+Live at <https://spotify-live-seven.vercel.app/card.svg>, which is the URL the
+profile README points at. Add `?theme=light` for the light variant; the README
+picks between them with a `<picture>` element.
 
-You need to log in first — it opens a browser, so I can't do it for you:
+---
+
+## Credentials
+
+Don't set them here by hand. From the repo root:
 
 ```bash
-vercel login
+python scripts/get_refresh_token.py
 ```
 
-Then, from this directory:
+That walks the Spotify OAuth redirect in your own browser, then pipes
+`SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` and `SPOTIFY_REFRESH_TOKEN` into
+`vercel env add` over stdin, redeploys, and checks the endpoint came back
+configured. It sets the matching GitHub Actions secrets in the same pass, so
+the fallback renderer stays usable.
+
+Vercel bakes environment variables in at build time. Setting them without a
+redeploy leaves the running function exactly as unconfigured as it was — which
+is the one failure mode here that looks fine from the terminal and broken on
+the profile.
+
+## Deploy a code change
 
 ```bash
 cd "C:/Users/91966/OneDrive/Desktop/4ryanwalia-profile/spotify-live" && vercel --prod
 ```
 
-Accept the defaults. Vercel prints a production URL — that is what the profile
-README needs to point at.
-
-## Set the three environment variables
-
-Same values already in the GitHub repo secrets:
-
-```bash
-vercel env add SPOTIFY_CLIENT_ID production && vercel env add SPOTIFY_CLIENT_SECRET production && vercel env add SPOTIFY_REFRESH_TOKEN production
-```
-
-Each prompts for the value and stores it encrypted. Then redeploy so the
-running build picks them up:
-
-```bash
-vercel --prod
-```
-
 ## Check it
 
 ```bash
-curl -s "https://YOUR-PROJECT.vercel.app/card.svg" | head -c 200
+curl -s "https://spotify-live-seven.vercel.app/card.svg" | head -c 160
 ```
 
-You should see `<svg ...><title>NOW PLAYING — ...`. Add `?theme=light` for the
-light variant.
+You want `aria-label="NOW PLAYING: ...`.
+
+---
+
+## What animates
+
+Declarative SMIL survives the browser's restricted static mode even though
+scripting does not, so all of this runs in the reader's browser from a plain
+`<img>`:
+
+- the equaliser — bouncing while a track plays, breathing slowly when not, so
+  the card never reads as a broken image
+- the progress bar and its playhead
+- a per-second elapsed counter, one text node per second, each revealed for
+  exactly its own second
+- titles and artists too long for the column, which scroll rather than being
+  cut off
+- a fade-in on every render, which is a visible receipt that the image was
+  drawn for this page view rather than served from a cache
 
 ---
 

@@ -1,6 +1,17 @@
-name: Spotify card
+name: Spotify card (fallback)
 
-# Refreshes the now-playing card on the profile README.
+# The escape hatch, not the live card.
+#
+# The README points at the Vercel endpoint in spotify-live/, which asks Spotify
+# at the moment someone loads the profile. This workflow renders the same card
+# into ./assets and rewrites the README block to use those files instead —
+# which is what you want if the endpoint ever has to be abandoned, and nothing
+# you want happening behind your back while the endpoint is healthy.
+#
+# So: no cron. Scheduled runs would quietly overwrite the live card with a
+# static one every five minutes, and the static one can only be as fresh as
+# GitHub's scheduler, which queues on shared runners and routinely lands 15-40
+# minutes apart. Run it by hand from the Actions tab when you actually want it.
 #
 # The refresh token lives in this repository's secrets and is read only by the
 # stdlib script in scripts/. Nothing is sent to a third-party service, and the
@@ -8,19 +19,7 @@ name: Spotify card
 # the API call.
 
 on:
-  schedule:
-    # Every 5 minutes, which is GitHub's floor. Treat it as a ceiling on
-    # freshness, not a promise: scheduled runs are queued on shared runners and
-    # routinely land 15-40 minutes apart under load. The card carries the time
-    # it was taken so a stale one cannot lie about being live. The script skips
-    # the commit when the track has not changed, so quiet nights cost nothing.
-    - cron: "*/5 * * * *"
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "scripts/spotify_card.py"
-      - ".github/workflows/spotify.yml"
 
 permissions:
   contents: write
