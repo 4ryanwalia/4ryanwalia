@@ -52,11 +52,11 @@ if I've stopped. The card below rebuilds itself every ten minutes.
 <!-- SPOTIFY:START -->
 <!-- rewritten by .github/workflows/spotify.yml - edit the script, not this block -->
 <p align="center">
-  <a href="https://open.spotify.com/">
+  <a href="https://open.spotify.com/track/2L1OXzqVPpVxotHfLglUcB">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-dark.svg?v=1789395287">
-      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-light.svg?v=1789395287">
-      <img src="./assets/spotify-dark.svg?v=1789395287" alt="Feed not configured yet" width="480">
+      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-dark.svg?v=1789398201">
+      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-light.svg?v=1789398201">
+      <img src="./assets/spotify-dark.svg?v=1789398201" alt="Last track played: Chauffeur — Diljit Dosanjh, Tory Lanez, Ikky" width="480">
     </picture>
   </a>
 </p>
