@@ -1,8 +1,5 @@
-<h1 align="center">hey, i'm aryan 🚩</h1>
-
 <p align="center">
-  <b>penetration tester</b> · founder of <a href="https://bugsnaps.in">BugSnaps</a> and <a href="https://www.myrecon.xyz">MyRecon</a> · <code>CEH</code><br>
-  <sub>i build tools that refuse to guess</sub>
+  <img src="./assets/hero.svg" width="860" alt="hey, i'm aryan. Red flag by trade. I find your data before someone worse does. Penetration tester, CEH, founder of BugSnaps and MyRecon.">
 </p>
 
 ---
@@ -78,7 +75,7 @@ that isn't real, tell me and I'll measure it.
 ## 🕵️ `$ whoami`
 
 <p align="center">
-  <img src="./assets/banner.svg" width="860" alt="Terminal running myrecon --target 4ryanwalia --deep --verify. Identity: Aryan Walia, confirmed. Role: penetration tester, CEH, confirmed. Building: BugSnaps and MyRecon, confirmed. Location: India, self-reported.">
+  <img src="./assets/banner.svg" width="860" alt="Terminal running myrecon --target 4ryanwalia --deep --verify. Identity: Aryan Walia, confirmed. Role: penetration tester, CEH, confirmed. Building: BugSnaps and MyRecon, confirmed.">
 </p>
 
 Mapping an organisation's attack surface and mapping a person's public
@@ -104,7 +101,6 @@ more than a bigger one that is partly fiction.
 <tr><td><b>Certification</b></td><td>Certified Ethical Hacker — passed first attempt</td><td><code>CONFIRMED</code></td></tr>
 <tr><td><b>Education</b></td><td>Master's degree, NMIMS Mumbai</td><td><code>CONFIRMED</code></td></tr>
 <tr><td><b>Handle</b></td><td><code>4ryanwalia</code> — same on nearly every platform</td><td><code>CONFIRMED</code></td></tr>
-<tr><td><b>Location</b></td><td>India · UTC+05:30</td><td><code>SELF-REPORTED</code></td></tr>
 </table>
 
 ### `$ ls ~/field-kit`
@@ -182,4 +178,4 @@ verification work.
   <a href="https://www.buymeacoffee.com/4ryanwalia"><img alt="Buy me a coffee" src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black&labelColor=0a0f1a"></a>
 </p>
 
-<p align="center"><sub><code>scan complete · 4 attributes confirmed · 1 self-reported · 0 inferred</code></sub></p>
+<p align="center"><sub><code>scan complete · 4 attributes confirmed · 0 inferred</code></sub></p>

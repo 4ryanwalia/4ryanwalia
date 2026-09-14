@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 250" width="860" height="250" role="img" aria-label="hey, i'm aryan. Red flag by trade. I find your data before someone worse does. Penetration tester, CEH, founder of BugSnaps and MyRecon.">
+  <title>hey, i'm aryan 🚩</title>
+  <defs>
+    <radialGradient id="glow" cx="0.82" cy="0.22" r="0.85">
+      <stop offset="0" stop-color="#f43f5e" stop-opacity="0.26"/>
+      <stop offset="0.45" stop-color="#7f1d3a" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#0a0f1a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.08" cy="0.9" r="0.7">
+      <stop offset="0" stop-color="#4a8bf7" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#0a0f1a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#ffffff" opacity="0.022"/>
+    </pattern>
+    <clipPath id="panel"><rect width="860" height="250" rx="14"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#panel)">
+    <rect width="860" height="250" fill="#0a0f1a"/>
+    <rect width="860" height="250" fill="url(#glow)"/>
+    <rect width="860" height="250" fill="url(#glow2)"/>
+    <rect width="860" height="250" fill="url(#scanlines)"/>
+  </g>
+  <rect x="0.5" y="0.5" width="859" height="249" rx="14" fill="none" stroke="#2c3c5a"/>
+
+  <!-- Kicker: explains the flag before the joke lands. -->
+  <g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">
+    <rect x="46" y="38" width="3" height="15" fill="#f43f5e"/>
+    <text x="60" y="51" font-size="12" letter-spacing="0.22em" font-weight="700" fill="#f43f5e">RED FLAG // BY TRADE</text>
+  </g>
+
+  <!-- Chromatic-aberration ghosts behind the headline, jittering on a loop. -->
+  <g font-family="'Arial Black','Helvetica Neue',Impact,system-ui,sans-serif" font-weight="900" font-size="62" letter-spacing="-0.022em">
+    <text x="44" y="129" fill="#f43f5e" opacity="0.62">hey, i'm aryan
+      <animateTransform attributeName="transform" type="translate" calcMode="discrete"
+        values="-3,0; 2,1; -4,0; 0,0; 0,0; 0,0; 3,-1; 0,0; 0,0; 0,0; 0,0; 0,0"
+        dur="3.6s" repeatCount="indefinite"/>
+    </text>
+    <text x="44" y="129" fill="#22d3ee" opacity="0.5">hey, i'm aryan
+      <animateTransform attributeName="transform" type="translate" calcMode="discrete"
+        values="3,0; -2,-1; 4,1; 0,0; 0,0; 0,0; -3,0; 0,0; 0,0; 0,0; 0,0; 0,0"
+        dur="3.6s" repeatCount="indefinite"/>
+    </text>
+    <text x="44" y="129" fill="#ffffff">hey, i'm aryan <tspan font-size="50">🚩</tspan></text>
+  </g>
+
+  <text x="46" y="171" font-family="ui-sans-serif,system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="19" fill="#cbd5e1">i find your data before someone worse does.</text>
+
+  <line x1="46" y1="194" x2="814" y2="194" stroke="#1f2b42"/>
+  <text x="46" y="220" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12.5" fill="#7d8aa3">penetration tester<tspan fill="#2c3c5a"> · </tspan>CEH<tspan fill="#2c3c5a"> · </tspan>founder of <tspan fill="#4a8bf7">BugSnaps</tspan> + <tspan fill="#34d399">MyRecon</tspan></text>
+
+  <rect x="46" y="232" width="0" height="2" fill="#f43f5e" opacity="0.7">
+    <animate attributeName="width" from="0" to="768" dur="1.2s" begin="0.3s" fill="freeze"/>
+  </rect>
+</svg>
