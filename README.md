@@ -19,11 +19,6 @@
 </p>
 <!-- SPOTIFY:END -->
 
-<p align="center"><sub>
-straight off the Spotify Web API. it's a snapshot rather than a stream, so it
-tells you when it was taken instead of pretending to be live.
-</sub></p>
-
 ---
 
 ## 🏗️ what i'm building
