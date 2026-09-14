@@ -145,8 +145,17 @@ def digest(user: dict) -> dict:
     ranked = sorted(langs.items(), key=lambda kv: -kv[1]["size"])[:5]
     total_bytes = sum(v["size"] for v in langs.values()) or 1
 
+    weekday = [0] * 7
+    monthly: dict = {}
+    for day in days:
+        weekday[day["weekday"]] += day["count"]
+        monthly[day["date"][:7]] = monthly.get(day["date"][:7], 0) + day["count"]
+    months = sorted(monthly.items())[-12:]
+
     longest, current = streaks(days)
     return {
+        "weekday": weekday,
+        "months": months,
         "weeks": weeks,
         "total": cal["totalContributions"],
         "active": sum(1 for d in days if d["count"] > 0),
@@ -179,115 +188,115 @@ def level(count: int, peak: int) -> int:
     return 4
 
 
-# -------------------------------------------------------------- contributions
+# ------------------------------------------------------------ pattern of life
 
-CELL, GAP = 11, 2
-PITCH = CELL + GAP
-GRID_X, GRID_Y = 42, 52
+DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
-def contributions_svg(d: dict, theme: str) -> str:
+def rhythm_svg(d: dict, theme: str) -> str:
+    """Which days the subject actually ships on, and how the year trended.
+
+    Deliberately not a heatmap of the year: GitHub already draws that two
+    sections further down the profile, and a second copy of it says nothing
+    the first one did not. "Pattern of life" is the intelligence term for
+    working out a subject's routine, which is exactly what this is.
+    """
     c = THEMES[theme]
-    cols = len(d["weeks"])
-    grid_w = cols * PITCH - GAP
-    W = GRID_X + grid_w + 22
-    H = GRID_Y + 7 * PITCH - GAP + 46
+    W, H = 740, 238
+    busiest = max(range(7), key=lambda i: d["weekday"][i])
+    quietest = min(range(7), key=lambda i: d["weekday"][i])
+    top = max(d["weekday"]) or 1
 
     out = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
-        f'viewBox="0 0 {W} {H}" role="img" aria-label="Contribution graph: '
-        f'{d["total"]} contributions over the last year, active on {d["active"]} '
-        f'of {d["span"]} days.">',
-        f"<title>{d['total']} contributions · {d['active']} active days</title>",
+        f'viewBox="0 0 {W} {H}" role="img" aria-label="Pattern of life: busiest '
+        f'on {DAYS[busiest]}, quietest on {DAYS[quietest]}, with monthly volume '
+        f'over the last year.">',
+        "<title>Pattern of life</title>",
         "<defs>",
-        # The sweep: a soft column of light travelling across the grid, the way
-        # a radar trace crosses a scope.
-        f'<linearGradient id="sweep-{theme}" x1="0" y1="0" x2="1" y2="0">'
-        f'<stop offset="0" stop-color="{c["accent"]}" stop-opacity="0"/>'
-        f'<stop offset="0.55" stop-color="{c["accent"]}" stop-opacity="0.16"/>'
-        f'<stop offset="0.85" stop-color="{c["accent"]}" stop-opacity="0.42"/>'
-        f'<stop offset="1" stop-color="{c["accent"]}" stop-opacity="0"/>'
+        f'<linearGradient id="fill-{theme}" x1="0" y1="0" x2="0" y2="1">'
+        f'<stop offset="0" stop-color="{c["accent"]}" stop-opacity="0.34"/>'
+        f'<stop offset="1" stop-color="{c["accent"]}" stop-opacity="0.02"/>'
         "</linearGradient>",
-        f'<clipPath id="scope-{theme}"><rect x="{GRID_X}" y="{GRID_Y}" '
-        f'width="{grid_w}" height="{7 * PITCH - GAP}"/></clipPath>',
         "</defs>",
         f'<rect width="{W}" height="{H}" rx="12" fill="{c["card"]}"/>',
         f'<rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="12" '
         f'fill="none" stroke="{c["border"]}"/>',
         f'<text x="20" y="28" font-family="{MONO}" font-size="11.5" '
         f'font-weight="700" letter-spacing="0.10em" fill="{c["accent"]}">'
-        f"CONTRIBUTION SIGNAL</text>",
+        f"PATTERN OF LIFE</text>",
         f'<text x="{W - 20}" y="28" text-anchor="end" font-family="{MONO}" '
-        f'font-size="11" fill="{c["mute"]}">{d["span"]}-day window</text>',
+        f'font-size="10.5" fill="{c["mute"]}">derived from {d["span"]} days</text>',
+        f'<line x1="372" y1="44" x2="372" y2="{H - 44}" stroke="{c["rule"]}"/>',
+        f'<text x="20" y="52" font-family="{MONO}" font-size="9.5" '
+        f'letter-spacing="0.08em" fill="{c["mute"]}">BY DAY OF WEEK</text>',
     ]
 
-    # Month labels, printed once at each month's first week.
-    seen = set()
-    for i, week in enumerate(d["weeks"]):
-        if not week:
-            continue
-        first = date.fromisoformat(week[0]["date"])
-        if first.month not in seen and first.day <= 7:
-            seen.add(first.month)
-            out.append(
-                f'<text x="{GRID_X + i * PITCH}" y="{GRID_Y - 8}" '
-                f'font-family="{MONO}" font-size="9.5" fill="{c["mute"]}">'
-                f"{MONTHS[first.month - 1]}</text>"
-            )
-
-    for row, label in ((1, "Mon"), (3, "Wed"), (5, "Fri")):
+    for i, name in enumerate(DAYS):
+        y = 72 + i * 21
+        value = d["weekday"][i]
+        width = max(3.0, 232 * value / top)
+        shade = c["accent"] if i == busiest else c["ramp"][2]
         out.append(
-            f'<text x="{GRID_X - 8}" y="{GRID_Y + row * PITCH + 9}" '
-            f'text-anchor="end" font-family="{MONO}" font-size="9" '
-            f'fill="{c["mute"]}">{label}</text>'
+            f'<text x="20" y="{y + 4}" font-family="{MONO}" font-size="10.5" '
+            f'fill="{c["dim"] if i == busiest else c["mute"]}">{name}</text>'
+            f'<rect x="56" y="{y - 5}" width="232" height="10" rx="5" '
+            f'fill="{c["grid"]}"/>'
+            f'<rect x="56" y="{y - 5}" width="{width:.1f}" height="10" rx="5" '
+            f'fill="{shade}"/>'
+            f'<text x="{352}" y="{y + 4}" text-anchor="end" font-family="{MONO}" '
+            f'font-size="10" fill="{c["mute"]}">{value}</text>'
         )
 
-    for i, week in enumerate(d["weeks"]):
-        for day in week:
-            x = GRID_X + i * PITCH
-            y = GRID_Y + day["weekday"] * PITCH
-            fill = c["ramp"][level(day["count"], d["peak"])]
+    out.append(
+        f'<text x="396" y="52" font-family="{MONO}" font-size="9.5" '
+        f'letter-spacing="0.08em" fill="{c["mute"]}">MONTHLY VOLUME</text>'
+    )
+
+    months = d["months"] or [("", 0)]
+    peak = max(v for _k, v in months) or 1
+    left, right = 400.0, 716.0
+    base, height = 186.0, 104.0
+    step = (right - left) / max(1, len(months) - 1)
+    pts = [(left + i * step, base - height * (v / peak))
+           for i, (_k, v) in enumerate(months)]
+
+    area = (f'M {pts[0][0]:.1f},{base} '
+            + " ".join(f"L {x:.1f},{y:.1f}" for x, y in pts)
+            + f" L {pts[-1][0]:.1f},{base} Z")
+    line = "M " + " L ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    out.append(
+        f'<line x1="{left}" y1="{base}" x2="{right}" y2="{base}" '
+        f'stroke="{c["rule"]}"/>'
+        f'<path d="{area}" fill="url(#fill-{theme})"/>'
+        f'<path d="{line}" fill="none" stroke="{c["accent"]}" stroke-width="2" '
+        f'stroke-linejoin="round" stroke-linecap="round"/>'
+    )
+    for i, ((key, value), (x, y)) in enumerate(zip(months, pts)):
+        if value == peak:
             out.append(
-                f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}" rx="2.5" '
-                f'fill="{fill}"><title>{day["date"]}: {day["count"]}</title></rect>'
+                f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.5" fill="{c["accent"]}"/>'
+                f'<text x="{x:.1f}" y="{y - 10:.1f}" text-anchor="middle" '
+                f'font-family="{MONO}" font-size="9.5" font-weight="700" '
+                f'fill="{c["text"]}">{value}</text>'
+            )
+        if key and (i % 2 == 0 or i == len(months) - 1):
+            out.append(
+                f'<text x="{x:.1f}" y="{base + 14}" text-anchor="middle" '
+                f'font-family="{MONO}" font-size="9" fill="{c["mute"]}">'
+                f"{MONTHS[int(key[5:7]) - 1]}</text>"
             )
 
     out.append(
-        f'<g clip-path="url(#scope-{theme})">'
-        f'<rect x="{GRID_X - 60}" y="{GRID_Y}" width="60" '
-        f'height="{7 * PITCH - GAP}" fill="url(#sweep-{theme})">'
-        f'<animate attributeName="x" from="{GRID_X - 60}" to="{GRID_X + grid_w}" '
-        f'dur="4.5s" repeatCount="indefinite"/>'
-        "</rect></g>"
-    )
-
-    base = GRID_Y + 7 * PITCH - GAP + 26
-    out.append(
-        f'<text x="20" y="{base}" font-family="{MONO}" font-size="10" '
-        f'fill="{c["mute"]}">detections <tspan fill="{c["text"]}" '
-        f'font-weight="700">{d["total"]}</tspan>  ·  active '
-        f'<tspan fill="{c["text"]}">{d["active"]}d</tspan>  ·  peak '
-        f'<tspan fill="{c["text"]}">{d["peak"]}/day</tspan>  ·  longest run '
-        f'<tspan fill="{c["text"]}">{d["longest"]}d</tspan>  ·  current '
-        f'<tspan fill="{c["ok"] if d["current"] else c["mute"]}">'
-        f'{d["current"]}d</tspan></text>'
-    )
-
-    legend_x = W - 20 - 26 - 5 * 15
-    out.append(
-        f'<text x="{legend_x - 8}" y="{base}" text-anchor="end" '
-        f'font-family="{MONO}" font-size="9" fill="{c["mute"]}">less</text>'
-    )
-    for i, shade in enumerate(c["ramp"]):
-        out.append(
-            f'<rect x="{legend_x + i * 15}" y="{base - 9}" width="11" height="11" '
-            f'rx="2.5" fill="{shade}"/>'
-        )
-    out.append(
-        f'<text x="{legend_x + 5 * 15 + 1}" y="{base}" font-family="{MONO}" '
-        f'font-size="9" fill="{c["mute"]}">more</text>'
+        f'<text x="20" y="{H - 16}" font-family="{MONO}" font-size="10" '
+        f'fill="{c["mute"]}">busiest <tspan fill="{c["text"]}" font-weight="700">'
+        f'{DAYS[busiest]}</tspan>  ·  quietest <tspan fill="{c["text"]}">'
+        f'{DAYS[quietest]}</tspan>  ·  longest run <tspan fill="{c["text"]}">'
+        f'{d["longest"]}d</tspan>  ·  current <tspan '
+        f'fill="{c["ok"] if d["current"] else c["mute"]}">{d["current"]}d</tspan>'
+        f"</text>"
     )
     out.append("</svg>")
     return "".join(out)
@@ -369,7 +378,7 @@ def main() -> int:
 
     os.makedirs(ASSETS, exist_ok=True)
     for theme in ("dark", "light"):
-        for name, svg in (("contributions", contributions_svg(data, theme)),
+        for name, svg in (("rhythm", rhythm_svg(data, theme)),
                           ("stats", stats_svg(data, theme))):
             path = os.path.join(ASSETS, f"{name}-{theme}.svg")
             with open(path, "w", encoding="utf-8", newline="\n") as fh:

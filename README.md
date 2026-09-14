@@ -138,9 +138,9 @@ more than a bigger one that is partly fiction.
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/contributions-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/contributions-light.svg">
-    <img src="./assets/contributions-dark.svg" alt="A year of contributions drawn as a radar scope, with a sweep crossing the grid" width="740">
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/rhythm-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/rhythm-light.svg">
+    <img src="./assets/rhythm-dark.svg" alt="Pattern of life: contributions by day of week, and monthly volume across the year" width="740">
   </picture>
 </p>
 
@@ -153,6 +153,11 @@ more than a bigger one that is partly fiction.
 </p>
 
 <p align="center"><sub>
+
+<b>Pattern of life</b> is the intelligence term for working out a subject's
+routine, so it seemed the honest label for this. It is deliberately not a
+heatmap of the year — GitHub already draws one further down this page, and a
+second copy of it would tell you nothing the first one didn't.
 
 Both panels are rendered from GitHub's own GraphQL API by
 <a href="./scripts/stats_card.py">a script in this repo</a>, not by a
