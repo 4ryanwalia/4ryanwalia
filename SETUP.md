@@ -89,13 +89,15 @@ file into.
 | **Commits** | only when the track changes, authored by `github-actions[bot]` so your contribution graph stays honest |
 | **Token custody** | GitHub Actions secrets → the script → Spotify. No third-party widget host in the path. |
 
-**Album art is inlined as a base64 data URI.** That is not decoration — GitHub
-proxies README images through Camo, and Camo will not fetch a remote `href`
-from inside an SVG, so a linked cover would render blank for everyone.
+**Album art is inlined as a base64 data URI.** That is not decoration. An SVG
+loaded through an `<img>` tag renders in the browser's restricted static mode,
+which blocks every external resource the document tries to fetch — so a linked
+cover URL renders blank for everyone, no matter how it is served.
 
-**The `?v=` query string is a cache-buster.** Camo caches aggressively; the
-script rewrites the README `srcset`s with a fresh timestamp each run so the
-new card is actually fetched rather than served from cache.
+**The `?v=` query string is a cache-buster.** Images living in this repo are
+served from `github.com/4ryanwalia/4ryanwalia/raw/main/...` behind a CDN rather
+than through Camo, but it caches all the same; the script rewrites the README
+`srcset`s with a fresh timestamp each run so a new card is actually fetched.
 
 **Failures are silent on purpose.** If Spotify returns a 502 or the token
 refresh hiccups, the script exits cleanly and leaves the last good card in
