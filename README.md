@@ -9,11 +9,11 @@
 <!-- SPOTIFY:START -->
 <!-- rewritten by .github/workflows/spotify.yml - edit the script, not this block -->
 <p align="center">
-  <a href="https://open.spotify.com/track/1Cbl3Yq8rHo7hhDQmLQagU">
+  <a href="https://open.spotify.com/track/0bkW98npv8EsWQ2fXFzK56">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-dark.svg?v=1789403034">
-      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-light.svg?v=1789403034">
-      <img src="./assets/spotify-dark.svg?v=1789403034" alt="Playing right now: PUSH 2 START — Tyla" width="480">
+      <source media="(prefers-color-scheme: dark)" srcset="./assets/spotify-e5a2c7ebd0-dark.svg">
+      <source media="(prefers-color-scheme: light)" srcset="./assets/spotify-e5a2c7ebd0-light.svg">
+      <img src="./assets/spotify-e5a2c7ebd0-dark.svg" alt="Paused mid-track: From Eden — Hozier" width="480">
     </picture>
   </a>
 </p>
