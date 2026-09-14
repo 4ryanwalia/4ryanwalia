@@ -160,7 +160,8 @@ Email is the reliable route. I'm `4ryanwalia` nearly everywhere else.
   <a href="mailto:aryan@bugsnaps.in"><b>aryan@bugsnaps.in</b></a> &nbsp;·&nbsp;
   <a href="https://bugsnaps.in">bugsnaps.in</a> &nbsp;·&nbsp;
   <a href="https://www.myrecon.xyz">myrecon.xyz</a> &nbsp;·&nbsp;
-  <a href="https://hackerone.com/4ryanwalia">HackerOne</a>
+  <a href="https://hackerone.com/4ryanwalia">HackerOne</a> &nbsp;·&nbsp;
+  <a href="https://open.spotify.com/user/31zbuvzhd6mp2cjl3zeed7x2bamu">Spotify</a>
 </p>
 
 <sub>
