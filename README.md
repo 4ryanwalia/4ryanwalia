@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/hero.svg" width="860" alt="hey, i'm aryan. Red flag by trade. I find your data before someone worse does. Penetration tester, CEH, founder of BugSnaps and MyRecon.">
+  <img src="./assets/hero.svg" width="860" alt="hey, i'm ARYAN. Offensive security and OSINT. I find the red flags before someone worse does. Penetration tester, CEH, founder of BugSnaps and MyRecon.">
 </p>
 
 ---
